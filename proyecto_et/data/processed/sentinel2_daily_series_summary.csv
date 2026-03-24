@@ -1,0 +1,11 @@
+metric,value
+n_total_images,102.0
+n_unique_dates_raw,71.0
+n_dates_with_duplicates,31.0
+n_daily_selected,71.0
+n_daily_valid_final,21.0
+mean_valid_pixel_pct_final,80.08191660149014
+mean_ndvi_final,0.46284199582706254
+mean_evi_final,0.3716315685752469
+mean_savi_final,0.3055142311257124
+mean_ndre_final,0.31991269159751134

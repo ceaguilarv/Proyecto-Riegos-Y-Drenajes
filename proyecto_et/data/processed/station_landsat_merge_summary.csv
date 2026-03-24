@@ -1,0 +1,13 @@
+metric,value
+n_station_days,153.0
+n_landsat_days,45.0
+n_merged_days,153.0
+n_days_with_satellite_obs,2.0
+n_analysis_ready_days,2.0
+mean_et_analysis,2.16
+mean_temp_analysis,15.359271531506607
+mean_vpd_analysis,0.4504190611521195
+mean_lst_c_analysis,29.757729979147292
+median_lst_c_analysis,29.940606377708058
+mean_lst_minus_ta_analysis,14.398458447640687
+mean_valid_pixel_pct_analysis,95.86397058823525

@@ -1,0 +1,1 @@
+date,datetime_utc,image_id,sensor_label,spacecraft_id,wrs_path,wrs_row,valid_pixel_pct,is_valid_satellite_obs,LST_C_mean,LST_C_median,LST_C_stdDev,LST_K_mean,LST_K_median,LST_K_stdDev

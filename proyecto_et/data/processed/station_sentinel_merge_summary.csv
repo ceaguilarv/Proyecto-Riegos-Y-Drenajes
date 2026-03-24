@@ -1,0 +1,12 @@
+metric,value
+n_station_days,153.0
+n_sentinel_days,21.0
+n_merged_days,153.0
+n_days_with_satellite_obs,10.0
+n_analysis_ready_days,9.0
+mean_et_analysis,2.3899999999999997
+mean_ndvi_analysis,0.4762110994168174
+mean_evi_analysis,0.38049365223258874
+mean_savi_analysis,0.31588805024854477
+mean_ndre_analysis,0.33279322601066486
+mean_valid_pixel_pct_analysis,79.1672345790816

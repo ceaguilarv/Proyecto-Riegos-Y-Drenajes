@@ -1,0 +1,7 @@
+metric,value
+n_images,45.0
+n_valid_images,10.0
+mean_valid_pixel_pct,21.101770152505445
+mean_lst_c,27.648043278017404
+median_lst_c,28.597172484219733
+std_lst_c,1.4101576582418693

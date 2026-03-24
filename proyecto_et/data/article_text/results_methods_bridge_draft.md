@@ -1,0 +1,3 @@
+# Párrafo puente entre métodos y resultados
+
+Se evaluaron relaciones bivariadas entre la ET de estación y cuatro proxies espectrales Sentinel-2 (NDVI, EVI, SAVI y NDRE) para el mismo día, medias móviles y acumulados temporales. El mejor ajuste para la ET del mismo día se observó con SAVI (r = 0.814, R² = 0.663), por lo que este modelo se utilizó como caso focal en los análisis de robustez. Dado el tamaño muestral limitado (n = 9), se aplicaron pruebas leave-one-out, bootstrap y permutación. En conjunto, estos análisis mostraron que la relación permaneció positiva y de magnitud comparable tras excluir observaciones individuales, mantuvo pendiente positiva en el remuestreo y excedió claramente lo esperable bajo aleatorización (p empírico = 0.0087).

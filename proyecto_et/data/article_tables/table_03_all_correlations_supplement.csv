@@ -1,0 +1,29 @@
+target,target_label,target_group,rank_within_target,predictor,predictor_label,n,pearson_r,spearman_rho
+et_base_out_mm_d,ET diaria (mismo día),mismo_dia,1,SAVI_mean,SAVI,9,0.814,0.683
+et_base_out_mm_d,ET diaria (mismo día),mismo_dia,2,NDVI_mean,NDVI,9,0.761,0.667
+et_base_out_mm_d,ET diaria (mismo día),mismo_dia,3,EVI_mean,EVI,9,0.742,0.817
+et_base_out_mm_d,ET diaria (mismo día),mismo_dia,4,NDRE_mean,NDRE,9,0.682,0.567
+et_base_out_mm_d_w3_mean,ET media móvil 3 días (incluye día satelital),media_movil,1,NDVI_mean,NDVI,9,0.601,0.667
+et_base_out_mm_d_w3_mean,ET media móvil 3 días (incluye día satelital),media_movil,2,SAVI_mean,SAVI,9,0.512,0.533
+et_base_out_mm_d_w3_mean,ET media móvil 3 días (incluye día satelital),media_movil,3,NDRE_mean,NDRE,9,0.44,0.45
+et_base_out_mm_d_w3_mean,ET media móvil 3 días (incluye día satelital),media_movil,4,EVI_mean,EVI,9,0.365,0.417
+et_base_out_mm_d_w3_sum,ET acumulada 3 días (incluye día satelital),acumulada,1,EVI_mean,EVI,9,0.113,0.367
+et_base_out_mm_d_w3_sum,ET acumulada 3 días (incluye día satelital),acumulada,2,SAVI_mean,SAVI,9,0.097,0.333
+et_base_out_mm_d_w3_sum,ET acumulada 3 días (incluye día satelital),acumulada,3,NDVI_mean,NDVI,9,0.05,0.45
+et_base_out_mm_d_w3_sum,ET acumulada 3 días (incluye día satelital),acumulada,4,NDRE_mean,NDRE,9,-0.11,0.15
+et_base_out_mm_d_w5_mean,ET media móvil 5 días (incluye día satelital),media_movil,1,NDVI_mean,NDVI,9,0.67,0.636
+et_base_out_mm_d_w5_mean,ET media móvil 5 días (incluye día satelital),media_movil,2,NDRE_mean,NDRE,9,0.583,0.502
+et_base_out_mm_d_w5_mean,ET media móvil 5 días (incluye día satelital),media_movil,3,SAVI_mean,SAVI,9,0.411,0.268
+et_base_out_mm_d_w5_mean,ET media móvil 5 días (incluye día satelital),media_movil,4,EVI_mean,EVI,9,0.18,0.444
+et_base_out_mm_d_w5_sum,ET acumulada 5 días (incluye día satelital),acumulada,1,EVI_mean,EVI,9,-0.016,0.377
+et_base_out_mm_d_w5_sum,ET acumulada 5 días (incluye día satelital),acumulada,2,SAVI_mean,SAVI,9,-0.038,0.134
+et_base_out_mm_d_w5_sum,ET acumulada 5 días (incluye día satelital),acumulada,3,NDVI_mean,NDVI,9,-0.053,0.435
+et_base_out_mm_d_w5_sum,ET acumulada 5 días (incluye día satelital),acumulada,4,NDRE_mean,NDRE,9,-0.181,0.184
+et_base_out_mm_d_w7_mean,ET media móvil 7 días (incluye día satelital),media_movil,1,NDVI_mean,NDVI,9,0.597,0.467
+et_base_out_mm_d_w7_mean,ET media móvil 7 días (incluye día satelital),media_movil,2,NDRE_mean,NDRE,9,0.431,0.25
+et_base_out_mm_d_w7_mean,ET media móvil 7 días (incluye día satelital),media_movil,3,SAVI_mean,SAVI,9,0.347,0.283
+et_base_out_mm_d_w7_mean,ET media móvil 7 días (incluye día satelital),media_movil,4,EVI_mean,EVI,9,0.077,0.15
+et_base_out_mm_d_w7_sum,ET acumulada 7 días (incluye día satelital),acumulada,1,EVI_mean,EVI,9,-0.065,0.1
+et_base_out_mm_d_w7_sum,ET acumulada 7 días (incluye día satelital),acumulada,2,SAVI_mean,SAVI,9,-0.1,0.017
+et_base_out_mm_d_w7_sum,ET acumulada 7 días (incluye día satelital),acumulada,3,NDVI_mean,NDVI,9,-0.145,0.2
+et_base_out_mm_d_w7_sum,ET acumulada 7 días (incluye día satelital),acumulada,4,NDRE_mean,NDRE,9,-0.294,-0.167

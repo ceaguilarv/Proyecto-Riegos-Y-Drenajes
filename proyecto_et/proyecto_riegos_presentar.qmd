@@ -1,0 +1,386 @@
+---
+title: "Integración de datos meteorológicos de superficie y percepción remota para la estimación de evapotranspiración en una zona homogénea de pasturas y su proyección metodológica al ambiente de invernadero"
+subtitle: "Documento de planteamiento metodológico para artículo científico"
+author: "Carlos Esteban Aguilar Vargas"
+date: 2026-03-21
+lang: es
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    theme: cosmo
+    code-fold: false
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
+editor: visual
+execute:
+  echo: false
+  warning: false
+  message: false
+bibliography: referencias.bib
+csl: apa.csl
+---
+
+::: {.text-center}
+**Universidad Nacional de Colombia**
+
+**Facultad de Ciencias Agrarias**
+
+**Propuesta metodológica para artículo científico**
+
+**Título del proyecto**
+
+**Integración de datos meteorológicos de superficie y percepción remota para la estimación de evapotranspiración en una zona homogénea de pasturas y su proyección metodológica al ambiente de invernadero**
+
+**Autor:** Carlos Esteban Aguilar Vargas
+
+**Área temática:** Geomática, climatología agrícola, micrometeorología e integración estación-satélite
+
+**Lugar de estudio:** Invernaderos de la Facultad de Ciencias Agrarias, Universidad Nacional de Colombia, Bogotá D.C.
+
+**Fecha:** Marzo 2026
+:::
+
+\newpage
+
+# Resumen ejecutivo
+
+Este documento presenta el planteamiento metodológico de un proyecto orientado a evaluar la relación entre la evapotranspiración estimada a partir de datos meteorológicos de superficie y la evapotranspiración o sus proxies derivados de sensores remotos, utilizando como unidad de análisis una zona homogénea de pasturas alrededor de una estación meteorológica. El entorno inmediato de la estación presenta condiciones favorables para una primera fase del estudio, dado que la cobertura dominante es pastura de kikuyo, la topografía es plana y la heterogeneidad espacial es baja. Estas condiciones permiten construir una comparación metodológicamente sólida entre información meteorológica puntual y variables espaciales derivadas de percepción remota.
+
+El trabajo se desarrollará con Python en VS Code y Google Earth Engine, mediante un flujo reproducible. La base meteorológica se apoyará inicialmente en la evapotranspiración reportada por la estación como referencia operativa del sistema, reconociendo que se trata de una variable modelada y no de una medición directa. De manera paralela, se construirán series temporales satelitales usando Sentinel-2 para índices de vegetación y Landsat 8/9 como apoyo térmico. A partir de estos datos se evaluará la viabilidad de construir un coeficiente de cultivo dinámico basado en NDVI y otros índices espectrales.
+
+El proyecto no pretende resolver en una primera etapa la evapotranspiración dentro del invernadero a partir de satélite. En cambio, propone una ruta escalonada: primero, validar la relación exterior entre estación y satélite sobre una superficie homogénea; después, utilizar esa base como soporte conceptual para una futura adaptación al ambiente de invernadero, donde ya se dispone de sensores meteorológicos internos y se proyecta la construcción de un lisímetro experimental de pesada como instrumento de validación.
+
+# 1. Contexto y justificación
+
+La evapotranspiración es una variable central en hidrología, climatología agrícola y manejo del riego. Su estimación puede realizarse desde enfoques meteorológicos, biofísicos y de percepción remota, pero cada aproximación representa una escala y una naturaleza física distinta. Los métodos meteorológicos, especialmente FAO-56 Penman-Monteith, permiten estimar evapotranspiración de referencia a partir de variables atmosféricas [@allen1998]. Por su parte, la percepción remota permite observar la variabilidad espacial de la cobertura vegetal y del estado de la superficie, aportando información útil para aproximar o explicar la demanda evaporativa en el territorio [@bastiaanssen1998; @senay2013].
+
+Uno de los principales retos metodológicos consiste en vincular una observación puntual, como la de una estación meteorológica, con una observación espacialmente distribuida, como la proveniente de imágenes satelitales. Esa comparación solo es sólida si la unidad espacial alrededor de la estación es suficientemente homogénea y si se distinguen correctamente variables como evapotranspiración de referencia, evapotranspiración del cultivo y evapotranspiración real.
+
+En este proyecto, la presencia de pasturas permanentes de kikuyo alrededor de la estación constituye una oportunidad especialmente favorable para establecer una primera fase robusta. Sobre esa base, el proyecto busca avanzar hacia una futura extensión al ambiente de invernadero, donde el problema se vuelve más complejo por la alteración del balance radiativo y aerodinámico dentro de la cubierta [@stanghellini1987].
+
+# 2. Contexto del sitio de estudio
+
+## 2.1 Localización general
+
+El estudio se desarrolla en los invernaderos de la Facultad de Ciencias Agrarias de la Universidad Nacional de Colombia, en Bogotá D.C., a una altitud aproximada de 2548 msnm. La estación meteorológica se ubica en un entorno con topografía plana y alta dominancia de pasturas permanentes de kikuyo.
+
+## 2.2 Unidad espacial principal
+
+Se trabajará sobre un polígono homogéneo cercano a la estación, equivalente a un entorno aproximado de 150 m, con baja mezcla espectral, cobertura estable y condiciones espaciales adecuadas para relacionar la señal satelital con la señal meteorológica local.
+
+## 2.3 Entorno de invernadero
+
+En el predio existen seis naves de invernadero con cobertura plástica, ventilación natural, aperturas cenitales y laterales, y cultivo principal de tomate en suelo. Además, se dispone de sensores meteorológicos internos con resolución temporal equivalente a la de los sensores externos.
+
+# 3. Estado actual de los datos
+
+## 3.1 Serie meteorológica disponible
+
+Se dispone de registros entre el 30 de julio de 2025 y el 13 de enero de 2026, con resolución temporal nominal de 5 minutos, tanto para condiciones internas como externas.
+
+## 3.2 Variables disponibles
+
+La estación reporta variables como temperatura, humedad relativa, radiación, PAR, DLI, DPV, punto de rocío y evapotranspiración, tanto dentro como fuera del invernadero.
+
+## 3.3 Consideración crítica sobre la evapotranspiración reportada
+
+A partir de la revisión del archivo de estación, la evapotranspiración interior y exterior se comporta como un **acumulado diario con reinicio cercano a medianoche**. Por esta razón:
+
+- no debe sumarse fila a fila como si cada registro de 5 minutos fuera una lámina incremental;
+- debe procesarse a escala diaria usando el último valor del día o el valor máximo diario;
+- debe considerarse una **referencia operativa modelada por el sistema**, no una medición directa ni un valor absoluto de verdad.
+
+Esta decisión metodológica es central para evitar errores de procesamiento y sobredimensionamiento de ET.
+
+# 4. Problema científico
+
+La pregunta de fondo que orienta el proyecto es si existe una relación significativa, estable e interpretable entre la evapotranspiración estimada mediante datos meteorológicos de superficie y la evapotranspiración o sus proxies derivados de sensores remotos, cuando ambas se comparan sobre una unidad espacial homogénea representativa del entorno de una estación meteorológica.
+
+El reto no es únicamente estadístico, sino físico y geomático. La evapotranspiración reportada por la estación es una salida modelada del sistema, mientras que la percepción remota captura la respuesta espectral y térmica integrada de una superficie. El proyecto debe, por tanto, evitar comparaciones conceptualmente incorrectas y construir puentes metodológicos consistentes entre ambas fuentes de información.
+
+# 5. Pregunta de investigación
+
+## 5.1 Pregunta principal
+
+¿Existe una relación significativa entre la evapotranspiración estimada a partir de datos meteorológicos de superficie y la evapotranspiración o sus proxies derivados de sensores remotos en una zona homogénea de pasturas, y puede esa relación constituir una base metodológica para una futura adaptación al ambiente de invernadero?
+
+## 5.2 Preguntas específicas
+
+1. ¿Qué tan consistente es la relación entre la evapotranspiración reportada por la estación y los indicadores espectrales y térmicos obtenidos a partir de sensores remotos sobre una superficie homogénea de pasturas?
+2. ¿La incorporación de un coeficiente de cultivo dinámico derivado de índices de vegetación mejora la correspondencia entre la señal meteorológica y la variable espacial derivada de satélite?
+3. ¿Qué índice de vegetación presenta mejor comportamiento para representar la variabilidad temporal de la cobertura: NDVI, EVI, SAVI o NDRE?
+4. ¿Qué configuración espacial del polígono homogéneo representa de forma más consistente el entorno de la estación meteorológica?
+5. ¿Puede la relación obtenida en condiciones exteriores utilizarse como base conceptual para una futura adaptación al ambiente de invernadero apoyada en microclima interno y validación lisimétrica?
+
+# 6. Hipótesis
+
+## 6.1 Hipótesis general
+
+Existe una relación significativa entre la evapotranspiración estimada a partir de datos meteorológicos de superficie y la evapotranspiración o sus proxies derivados de sensores remotos en una unidad espacial homogénea de pasturas, y dicha relación puede fortalecerse mediante la incorporación de un coeficiente de cultivo dinámico derivado de índices de vegetación.
+
+## 6.2 Hipótesis específicas
+
+1. La evapotranspiración del cultivo estimada como ETc = ET\_base × Kc\_dinámico presenta mejor correspondencia con la variable espacial satelital que la señal meteorológica base por sí sola.
+2. Al menos uno de los índices de vegetación evaluados representa mejor la dinámica de la cobertura vegetal que el NDVI, especialmente en condiciones de cobertura densa.
+3. La homogeneidad de la superficie de kikuyo alrededor de la estación reduce la incertidumbre asociada a la comparación entre observaciones puntuales y espaciales.
+4. La relación exterior entre meteorología y satélite no puede transferirse directamente al invernadero, pero sí puede emplearse como base para construir un modelo de adaptación con apoyo en datos internos y validación experimental.
+
+# 7. Objetivos
+
+## 7.1 Objetivo general
+
+Evaluar la relación entre la evapotranspiración estimada a partir de datos meteorológicos de superficie y la evapotranspiración o sus proxies derivados de sensores remotos en una zona homogénea de pasturas, incorporando un coeficiente de cultivo dinámico basado en índices de vegetación y estableciendo una base metodológica para su futura proyección al ambiente de invernadero.
+
+## 7.2 Objetivos específicos
+
+1. Depurar y estructurar correctamente la base temporal de la estación meteorológica, diferenciando variables instantáneas, variables acumuladas y valores diarios válidos.
+2. Extraer la evapotranspiración diaria interior y exterior reportada por la estación como referencia operativa del sistema.
+3. Delimitar una unidad espacial homogénea representativa del entorno de la estación meteorológica.
+4. Extraer y procesar series temporales satelitales de índices de vegetación y variables térmicas complementarias usando Sentinel-2 y Landsat 8/9.
+5. Construir y evaluar un coeficiente de cultivo dinámico a partir de NDVI y otros índices de vegetación.
+6. Comparar la evapotranspiración meteorológica y la evapotranspiración o proxy espacial satelital mediante métricas estadísticas y análisis temporal.
+7. Formular una ruta metodológica para la futura adaptación del modelo al ambiente de invernadero con apoyo en sensores internos y un lisímetro experimental.
+
+# 8. Alcances del proyecto
+
+## 8.1 Alcance científico
+
+El proyecto tiene como meta producir un artículo científico sólido y defendible, centrado en la relación entre modelos meteorológicos y espaciales de evapotranspiración en una superficie homogénea de pasturas.
+
+## 8.2 Alcance técnico
+
+Se implementará un flujo reproducible en Python y Google Earth Engine, incluyendo depuración temporal, extracción correcta de ET diaria, procesamiento satelital, modelado de Kc dinámico y análisis estadístico.
+
+## 8.3 Alcance aplicado
+
+El proyecto dejará sentadas las bases para una futura herramienta operativa de monitoreo de demanda hídrica y apoyo al riego, inicialmente en exterior y posteriormente en invernadero.
+
+## 8.4 Alcance espacial y temporal
+
+La fase principal del estudio se concentrará en una unidad espacial homogénea de pasturas de kikuyo alrededor de la estación meteorológica, durante la ventana temporal disponible entre julio de 2025 y enero de 2026.
+
+# 9. Delimitación conceptual de variables
+
+## 9.1 ET base reportada por la estación
+
+Corresponde a la evapotranspiración interior y exterior entregada por el sistema de monitoreo. Debe entenderse como una **variable modelada** y no como una medición directa.
+
+## 9.2 ETo
+
+La evapotranspiración de referencia describe la demanda atmosférica sobre una superficie estándar [@allen1998]. En esta etapa del proyecto, la serie reportada por la estación se usará provisionalmente como referencia operativa exterior, mientras se confirma la disponibilidad de variables para recalcular FAO-56 completa.
+
+## 9.3 ETc
+
+La evapotranspiración del cultivo se estimará a partir de la señal meteorológica base y un Kc dinámico derivado de índices de vegetación.
+
+## 9.4 ETa
+
+La evapotranspiración real representa el consumo efectivo de agua bajo condiciones reales. En este proyecto no debe confundirse con la ET reportada por la estación.
+
+## 9.5 Proxy satelital de ET
+
+Se refiere a variables espectrales o térmicas derivadas de satélite que se relacionan con el comportamiento evapotranspirativo de la superficie, aunque no siempre representen ET real en sentido estricto.
+
+# 10. Enfoque metodológico general
+
+El proyecto se desarrollará en un esquema escalonado. Primero se resolverá el problema más controlable: la relación entre estación y satélite en una superficie homogénea de pasturas. Luego se fortalecerá el análisis con sensibilidad metodológica, y finalmente se planteará la futura adaptación al ambiente de invernadero.
+
+# 11. Fases del proyecto
+
+## 11.1 Fase 0. Depuración y extracción correcta de ET diaria
+
+### Propósito
+
+Construir una base temporal confiable y extraer correctamente la evapotranspiración diaria sin errores de acumulación.
+
+### Actividades
+
+- unificación de fecha y hora;
+- ordenamiento y control de calidad temporal;
+- identificación de duplicados y huecos;
+- estandarización de nombres de variables;
+- clasificación de variables instantáneas y acumuladas;
+- extracción del valor diario correcto de ET interior y exterior;
+- definición de criterio de día válido.
+
+### Resultado esperado
+
+Tabla diaria confiable de ET interior y exterior, junto con indicadores diarios de calidad y continuidad.
+
+## 11.2 Fase 1. Fase mínima viable para el artículo
+
+### Propósito
+
+Evaluar la relación entre ET meteorológica y señal satelital en el polígono homogéneo de pasturas.
+
+### Actividades
+
+- consolidación de la tabla diaria exterior;
+- delimitación formal del polígono homogéneo;
+- extracción de índices de vegetación con Sentinel-2;
+- incorporación de apoyo térmico con Landsat 8/9;
+- formulación de Kc dinámico;
+- estimación de ETc;
+- comparación estadística y generación de figuras.
+
+### Resultado esperado
+
+Base científica del primer artículo.
+
+## 11.3 Fase 2. Fase ideal ampliada
+
+### Propósito
+
+Fortalecer la robustez metodológica del análisis.
+
+### Actividades
+
+- comparación entre NDVI, EVI, SAVI y NDRE;
+- análisis de sensibilidad al tamaño del polígono;
+- refinamiento del Kc dinámico;
+- integración más robusta del componente térmico;
+- análisis de incertidumbre.
+
+### Resultado esperado
+
+Versión metodológicamente fortalecida del manuscrito.
+
+## 11.4 Fase 3. Proyección a invernadero
+
+### Propósito
+
+Diseñar la transición metodológica hacia el ambiente protegido.
+
+### Actividades
+
+- organización de la base interna;
+- cálculo preliminar de ET interna;
+- comparación exterior-interior;
+- propuesta conceptual de modelo de transferencia.
+
+### Resultado esperado
+
+Base para un segundo artículo o una extensión del proyecto.
+
+## 11.5 Fase 4. Validación futura con lisímetro
+
+### Propósito
+
+Incorporar una referencia experimental de evapotranspiración dentro del invernadero.
+
+### Actividades
+
+- diseño e instalación del lisímetro;
+- registro de masa, riego y drenaje;
+- sincronización con series meteorológicas;
+- comparación entre ET lisimétrica y ET modelada.
+
+### Resultado esperado
+
+Validación experimental del módulo de invernadero.
+
+# 12. Cronograma propuesto de 12 semanas
+
+| Semana | Actividad principal | Producto esperado |
+|---|---|---|
+| 1 | Organización de archivos, lectura del Excel y unificación temporal | Base cruda ordenada |
+| 2 | Control de calidad, duplicados, huecos y regla de día válido | Reporte de calidad |
+| 3 | Extracción correcta de ET diaria interior y exterior | Tabla diaria depurada |
+| 4 | Delimitación del polígono homogéneo y preparación GEE | ROI validada |
+| 5 | Descarga y procesamiento de Sentinel-2 | Serie de índices ópticos |
+| 6 | Integración temporal estación-satélite | Tabla maestra preliminar |
+| 7 | Construcción de Kc dinámico | Serie Kc dinámica |
+| 8 | Estimación de ETc y primeras comparaciones | Resultados exploratorios |
+| 9 | Apoyo térmico con Landsat 8/9 | Variable térmica integrada |
+| 10 | Análisis estadístico final y sensibilidad | Tablas y métricas |
+| 11 | Elaboración de figuras y redacción de resultados | Borrador del manuscrito |
+| 12 | Ajustes finales, discusión y proyección a invernadero | Documento para revisión |
+
+# 13. Entregables por fase
+
+## Fase 0
+
+- script de depuración temporal;
+- tabla diaria de ET interior y exterior;
+- reporte de continuidad y calidad.
+
+## Fase 1
+
+- polígono homogéneo documentado;
+- series temporales satelitales;
+- tabla de Kc dinámico;
+- tabla de ETc;
+- figuras y tablas del artículo.
+
+## Fase 2
+
+- comparación entre índices;
+- análisis de sensibilidad;
+- evaluación de incertidumbre.
+
+## Fase 3
+
+- base sincronizada interior-exterior;
+- propuesta de adaptación metodológica al invernadero.
+
+## Fase 4
+
+- protocolo lisimétrico;
+- serie experimental depurada;
+- validación del modelo interno.
+
+# 14. Estrategia estadística
+
+La estrategia estadística será escalonada. Primero se emplearán modelos interpretables: regresiones lineales simples y múltiples, correlación, análisis de sesgo, RMSE, MAE e inspección de residuos. Solo en una etapa posterior, y si la estructura de datos lo justifica, se explorarán técnicas como random forest o XGBoost.
+
+# 15. Riesgos metodológicos y mitigación
+
+## 15.1 Nubosidad y pérdida de fechas
+
+Mitigación: usar filtros estrictos, múltiples escenas y agregación temporal cuando sea necesario.
+
+## 15.2 Saturación del NDVI
+
+Mitigación: comparar NDVI con EVI, SAVI y NDRE.
+
+## 15.3 Comparación entre variables no equivalentes
+
+Mitigación: distinguir claramente ET base, ETo, ETc, ETa y proxy satelital.
+
+## 15.4 Ventana temporal corta
+
+Mitigación: concentrar el artículo en una fase metodológicamente robusta, sin extrapolar a escalas multianuales.
+
+## 15.5 Complejidad del invernadero
+
+Mitigación: tratar el módulo de invernadero como proyección metodológica y no como eje total del primer artículo.
+
+## 15.6 Procesamiento incorrecto de la ET del Excel
+
+Mitigación: tratar la ET como acumulado diario con reinicio y no como suma de valores de 5 minutos.
+
+# 16. Criterios de éxito
+
+## Fase 0
+
+Se considerará exitosa si se obtiene una tabla diaria correcta y trazable de ET interior y exterior.
+
+## Fase 1
+
+Se considerará exitosa si se logra una comparación estadística defendible entre ET meteorológica y variable espacial.
+
+## Fase 2
+
+Se considerará exitosa si se identifica una formulación de Kc dinámico y una combinación de variables con desempeño consistente.
+
+## Fase 3
+
+Se considerará exitosa si se deja planteada una base metodológica creíble para el ambiente de invernadero.
+
+## Fase 4
+
+Se considerará exitosa si el lisímetro aporta una referencia experimental útil para validación.
