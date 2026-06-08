@@ -6,11 +6,11 @@
 
 ## Figura 2
 
-**Relación entre la ET diaria de estación y SAVI del mismo día.** Cada punto representa una fecha con coincidencia estación–satélite (n = 9). La línea corresponde al ajuste lineal simple (ET = 1.149 + 3.929 × SAVI). El modelo presentó r = 0.814, R² = 0.663 y RMSE = 0.223 mm d⁻¹.
+**Relación entre la ET diaria de estación y SAVI del mismo día.** Cada punto representa una fecha con coincidencia estación–satélite (n = 8). La línea corresponde al ajuste lineal simple (ET = 0.773 + 5.137 × SAVI). El modelo presentó r = 0.900, R² = 0.810 y RMSE = 0.173 mm d⁻¹.
 
 ## Figura 3
 
-**Comparación de predictores espectrales para ET del mismo día.** Se muestran los diagramas de dispersión y ajustes lineales simples entre la ET diaria de estación y los cuatro índices espectrales evaluados (SAVI, NDVI, EVI y NDRE). El panel permite comparar visualmente la fuerza relativa de las asociaciones y la dispersión residual entre predictores.
+**Comparación de predictores espectrales para ET del mismo día.** Se muestran los diagramas de dispersión y ajustes lineales simples entre la ET diaria de estación y los cuatro índices espectrales evaluados (SAVI, NDVI, NDRE y EVI). El panel permite comparar visualmente la fuerza relativa de las asociaciones y la dispersión residual entre predictores.
 
 ## Figura 4
 
@@ -22,4 +22,4 @@
 
 ## Figura adicional sugerida de robustez
 
-**Robustez del modelo ET diaria (mismo día) ~ SAVI.** Un panel complementario podría resumir el leave-one-out y el test de permutación, mostrando que la correlación se mantuvo entre r = 0.759 y r = 0.863 al excluir observaciones individuales y que la correlación observada superó claramente el percentil 95 de la distribución nula obtenida por permutación (p empírico = 0.0087).
+**Robustez del modelo ET diaria (mismo día) ~ SAVI.** Un panel complementario podría resumir el leave-one-out y el test de permutación, mostrando que la correlación se mantuvo entre r = 0.850 y r = 0.930 al excluir observaciones individuales y que la correlación observada superó claramente el percentil 95 de la distribución nula obtenida por permutación (p empírico = 0.0057).

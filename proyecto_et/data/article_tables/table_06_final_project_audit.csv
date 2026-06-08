@@ -1,0 +1,106 @@
+section,metric,value,interpretation
+station,n_station_days,158,Días diarios disponibles después de corregir fechas.
+station,date_start,2025-07-30,Inicio real de la serie diaria.
+station,date_end,2026-01-13,Fin real de la serie diaria.
+station,n_valid_analysis_days,143,Días válidos por cobertura y variables meteorológicas.
+station,mean_et_base_out_mm_d,1.925,ET diaria media de estación exterior.
+station,min_et_base_out_mm_d,0.0,ET diaria mínima.
+station,max_et_base_out_mm_d,2.98,ET diaria máxima.
+station,mean_temp_out_c,14.988,Temperatura exterior media.
+station,mean_rad_out,117.073,Radiación media exterior.
+sentinel_merge,n_station_days,158.0,Resumen del cruce estación-Sentinel.
+sentinel_merge,n_sentinel_days,10.0,Resumen del cruce estación-Sentinel.
+sentinel_merge,n_merged_days,158.0,Resumen del cruce estación-Sentinel.
+sentinel_merge,n_days_with_satellite_obs,9.0,Resumen del cruce estación-Sentinel.
+sentinel_merge,n_analysis_ready_days,8.0,Resumen del cruce estación-Sentinel.
+sentinel_merge,mean_et_analysis,2.415,Resumen del cruce estación-Sentinel.
+sentinel_merge,mean_ndvi_analysis,0.461495,Resumen del cruce estación-Sentinel.
+sentinel_merge,mean_evi_analysis,0.392972,Resumen del cruce estación-Sentinel.
+sentinel_merge,mean_savi_analysis,0.319658,Resumen del cruce estación-Sentinel.
+sentinel_merge,mean_ndre_analysis,0.316553,Resumen del cruce estación-Sentinel.
+sentinel_merge,mean_valid_pixel_pct_analysis,80.054885,Resumen del cruce estación-Sentinel.
+sentinel_analysis,date_start,2025-08-20,Primera fecha analysis-ready Sentinel.
+sentinel_analysis,date_end,2025-12-28,Última fecha analysis-ready Sentinel.
+sentinel_analysis,n_analysis_ready,8,Observaciones usadas en regresiones Sentinel.
+sentinel_best_model,target,et_base_out_mm_d,Variable dependiente del mejor modelo mismo día.
+sentinel_best_model,predictor,SAVI_mean,Mejor proxy espectral para ET diaria.
+sentinel_best_model,n,8,Tamaño muestral del modelo principal.
+sentinel_best_model,pearson_r,0.899943,Correlación de Pearson.
+sentinel_best_model,spearman_rho,0.833333,Correlación de Spearman.
+sentinel_best_model,r2,0.809897,Coeficiente de determinación.
+sentinel_best_model,rmse,0.173186,Error cuadrático medio en mm/día.
+sentinel_best_model,mae,0.146061,Error absoluto medio en mm/día.
+sentinel_best_model,slope,5.136603,Pendiente del modelo.
+sentinel_best_model,intercept,0.773045,Intercepto del modelo.
+sentinel_robustness,target,et_base_out_mm_d,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,predictor,SAVI_mean,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,n_full,8.0,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,date_start,2025-08-20,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,date_end,2025-12-28,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,full_intercept,0.773045,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,full_slope,5.136603,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,full_r2,0.809897,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,full_rmse,0.173186,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,full_mae,0.146061,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,full_bias,0.0,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,full_pearson_r,0.899943,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,full_spearman_rho,0.833333,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_min_r2,0.721843,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_max_r2,0.865562,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_min_pearson_r,0.849613,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_max_pearson_r,0.930356,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_max_abs_delta_r2,0.088054,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_max_abs_delta_pearson_r,0.05033,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_most_influential_date,2025-12-18,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_most_influential_abs_delta_r2,0.088054,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,loo_most_influential_abs_delta_r,0.05033,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_slope_mean,5.126171,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_slope_p02_5,3.655676,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_slope_p97_5,6.950286,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_r2_mean,0.796142,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_r2_p02_5,0.429866,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_r2_p97_5,0.983296,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_pearson_r_mean,0.887127,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_pearson_r_p02_5,0.650505,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,bootstrap_pearson_r_p97_5,0.991613,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,permutation_observed_abs_r,0.899943,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,permutation_null_mean_abs_r,0.314359,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,permutation_null_p95_abs_r,0.718256,Resumen de robustez del modelo principal Sentinel.
+sentinel_robustness,permutation_empirical_p_two_sided,0.005699,Resumen de robustez del modelo principal Sentinel.
+landsat_merge,n_station_days,158.0,Resumen del cruce estación-Landsat/LST.
+landsat_merge,n_landsat_days,18.0,Resumen del cruce estación-Landsat/LST.
+landsat_merge,n_merged_days,158.0,Resumen del cruce estación-Landsat/LST.
+landsat_merge,n_days_with_satellite_obs,4.0,Resumen del cruce estación-Landsat/LST.
+landsat_merge,n_analysis_ready_days,4.0,Resumen del cruce estación-Landsat/LST.
+landsat_merge,mean_et_analysis,2.2225,Resumen del cruce estación-Landsat/LST.
+landsat_merge,mean_temp_analysis,15.287267,Resumen del cruce estación-Landsat/LST.
+landsat_merge,mean_vpd_analysis,0.474411,Resumen del cruce estación-Landsat/LST.
+landsat_merge,mean_lst_c_analysis,29.124502,Resumen del cruce estación-Landsat/LST.
+landsat_merge,median_lst_c_analysis,29.194303,Resumen del cruce estación-Landsat/LST.
+landsat_merge,mean_lst_minus_ta_analysis,13.837234,Resumen del cruce estación-Landsat/LST.
+landsat_merge,mean_valid_pixel_pct_analysis,93.489277,Resumen del cruce estación-Landsat/LST.
+landsat_analysis,date_start,2025-11-07,Primera fecha analysis-ready Landsat.
+landsat_analysis,date_end,2025-12-17,Última fecha analysis-ready Landsat.
+landsat_analysis,n_analysis_ready,4,Coincidencias válidas estación-LST.
+landsat_analysis,mean_lst_c,29.125,LST media en fechas válidas.
+landsat_analysis,mean_lst_minus_ta_c,13.837,Diferencia media LST - temperatura del aire.
+landsat_diagnostic,n_landsat_roi_images,18,Imágenes Landsat extraídas sobre el ROI
+landsat_diagnostic,n_landsat_daily_dates,18,Fechas Landsat depuradas a escala diaria
+landsat_diagnostic,n_valid_roi_images,4,Imágenes válidas según máscara QA y umbral de píxeles válidos
+landsat_diagnostic,n_analysis_ready,4,Coincidencias válidas estación-Landsat
+landsat_diagnostic,roi_date_start,2025-08-03,Primera fecha Landsat ROI
+landsat_diagnostic,roi_date_end,2026-01-10,Última fecha Landsat ROI
+landsat_diagnostic,analysis_date_start,2025-11-07,Primera fecha usada en análisis
+landsat_diagnostic,analysis_date_end,2025-12-17,Última fecha usada en análisis
+landsat_diagnostic,valid_pixel_pct_median_roi,0.0,Mediana de píxeles válidos en todas las escenas ROI
+landsat_diagnostic,valid_pixel_pct_max_roi,98.06985294117644,Máximo porcentaje de píxeles válidos
+landsat_diagnostic,mean_valid_pixel_pct_analysis,93.48927696078428,Promedio de píxeles válidos en fechas analysis-ready
+landsat_diagnostic,mean_lst_c_analysis,29.12450152123844,LST media en fechas analysis-ready
+landsat_diagnostic,mean_temp_out_analysis,15.287267344700673,Temperatura media exterior en fechas analysis-ready
+landsat_diagnostic,mean_lst_minus_ta_analysis,13.83723417653777,Diferencia media LST - temperatura del aire
+landsat_diagnostic,min_lst_minus_ta_analysis,13.205885584496055,Mínima diferencia LST - temperatura del aire
+landsat_diagnostic,max_lst_minus_ta_analysis,14.988241744462451,Máxima diferencia LST - temperatura del aire
+methodological_decision,sentinel_status,usable_exploratory_model,"Sentinel-2 sí permite análisis exploratorio con regresiones simples, manteniendo cautela por n pequeño."
+methodological_decision,landsat_status,diagnostic_only,Landsat/LST no debe usarse para regresiones robustas porque solo tiene n=4.
+methodological_decision,main_result,SAVI_mean,SAVI fue el mejor proxy espectral para ET diaria del mismo día.
+methodological_decision,avoid_claim,SAVI_or_LST_do_not_calculate_ET,No afirmar que SAVI o LST calculan ET satelital.

@@ -1,0 +1,10 @@
+metric,value
+n_input_rows,45.0
+n_daily_rows,45.0
+n_duplicate_rows,0.0
+n_duplicate_dates,0.0
+n_merge_ready,10.0
+mean_valid_pixel_pct_daily,21.10177015250544
+mean_lst_c_daily,27.720043526262273
+median_lst_c_daily,28.58422370000005
+std_lst_c_daily,1.3907445836571377

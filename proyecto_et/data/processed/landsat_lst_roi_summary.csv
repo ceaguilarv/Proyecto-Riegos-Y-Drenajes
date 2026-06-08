@@ -1,7 +1,7 @@
 metric,value
-n_images,45.0
-n_valid_images,10.0
-mean_valid_pixel_pct,21.101770152505445
-mean_lst_c,27.648043278017404
-median_lst_c,28.597172484219733
-std_lst_c,1.4101576582418693
+n_images,18.0
+n_valid_images,4.0
+mean_valid_pixel_pct,20.775394880174286
+mean_lst_c,29.12450152123844
+median_lst_c,29.194302985276067
+std_lst_c,1.5307495982118136

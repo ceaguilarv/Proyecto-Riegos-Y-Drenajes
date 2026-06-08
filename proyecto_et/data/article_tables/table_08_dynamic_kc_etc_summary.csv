@@ -1,0 +1,25 @@
+metric,value,interpretation
+n_dates,8,Fechas Sentinel usadas para Kc dinámico.
+date_start,2025-08-20,Primera fecha con Kc dinámico.
+date_end,2025-12-28,Última fecha con Kc dinámico.
+kc_min_assumed,0.7,Límite inferior asumido para Kc dinámico exploratorio.
+kc_max_assumed,1.05,Límite superior asumido para Kc dinámico exploratorio.
+main_vi,SAVI,Índice principal usado para la rama Kc.
+comparison_vi,NDVI,Índice usado como comparación.
+mean_et_base_mm_d,2.415,ET base media de estación en fechas Sentinel.
+mean_kc_savi,0.862,Kc dinámico medio basado en SAVI.
+min_kc_savi,0.783,Mínimo temporal del Kc medio SAVI.
+max_kc_savi,0.935,Máximo temporal del Kc medio SAVI.
+mean_etc_savi_mm_d,2.1,ETc dinámica media basada en SAVI.
+min_etc_savi_mm_d,1.409,Mínima ETc media basada en SAVI.
+max_etc_savi_mm_d,2.702,Máxima ETc media basada en SAVI.
+mean_kc_ndvi,0.878,Kc dinámico medio basado en NDVI.
+mean_etc_ndvi_mm_d,2.139,ETc dinámica media basada en NDVI.
+mean_etc_savi_pct_of_et_base,86.19,ETc SAVI como porcentaje medio de ET base.
+mean_etc_ndvi_pct_of_et_base,87.84,ETc NDVI como porcentaje medio de ET base.
+r_et_base_vs_etc_savi,0.994,Correlación descriptiva; alta por construcción matemática ETc = ET_base × Kc.
+r_et_base_vs_kc_savi,0.905,"Relación entre demanda base y estado espectral; útil para interpretación, no validación."
+r_kc_savi_vs_kc_ndvi,0.96,Consistencia entre los dos enfoques de Kc dinámico.
+mean_spatial_sd_kc_savi,0.1417,Variabilidad espacial media del Kc SAVI dentro del ROI.
+mean_spatial_sd_etc_savi,0.3471,Variabilidad espacial media de ETc SAVI dentro del ROI.
+interpretation_status,exploratory_spatialization,"El producto espacializa ET base según vigor/cobertura, pero no valida ET real."

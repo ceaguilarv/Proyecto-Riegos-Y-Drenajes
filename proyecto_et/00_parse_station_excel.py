@@ -53,6 +53,14 @@ def clean_text(text: Any) -> str:
 
 
 def parse_excel_date(value: Any) -> pd.Timestamp | pd.NaT:
+    """
+    Convierte la fecha original del Excel a fecha normalizada.
+
+    Corrección crítica:
+    - Si la fecha viene en formato ISO tipo YYYY-MM-DD, se interpreta con dayfirst=False.
+      Ejemplo: 2025-11-01 debe ser 1 de noviembre de 2025, no 11 de enero de 2025.
+    - Solo para formatos ambiguos tipo DD/MM/YYYY se intenta primero dayfirst=True.
+    """
     if pd.isna(value):
         return pd.NaT
 
@@ -71,11 +79,27 @@ def parse_excel_date(value: Any) -> pd.Timestamp | pd.NaT:
     if not value_str:
         return pd.NaT
 
-    # Intenta primero formato día/mes/año
-    for dayfirst in (True, False):
-        parsed = pd.to_datetime(value_str, errors="coerce", dayfirst=dayfirst)
+    # Caso ISO explícito: YYYY-MM-DD o YYYY/MM/DD
+    # Este era el punto crítico del error.
+    if re.match(r"^\d{4}[-/]\d{1,2}[-/]\d{1,2}", value_str):
+        parsed = pd.to_datetime(value_str, errors="coerce", dayfirst=False)
         if pd.notna(parsed):
             return parsed.normalize()
+
+    # Caso con separador y año al final: probablemente DD/MM/YYYY
+    if re.match(r"^\d{1,2}[-/]\d{1,2}[-/]\d{4}", value_str):
+        parsed = pd.to_datetime(value_str, errors="coerce", dayfirst=True)
+        if pd.notna(parsed):
+            return parsed.normalize()
+
+        parsed = pd.to_datetime(value_str, errors="coerce", dayfirst=False)
+        if pd.notna(parsed):
+            return parsed.normalize()
+
+    # Último intento conservador
+    parsed = pd.to_datetime(value_str, errors="coerce", dayfirst=False)
+    if pd.notna(parsed):
+        return parsed.normalize()
 
     return pd.NaT
 

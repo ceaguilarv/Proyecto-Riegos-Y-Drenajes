@@ -1,0 +1,17 @@
+metric,value,note
+n_landsat_roi_images,18,Imágenes Landsat extraídas sobre el ROI
+n_landsat_daily_dates,18,Fechas Landsat depuradas a escala diaria
+n_valid_roi_images,4,Imágenes válidas según máscara QA y umbral de píxeles válidos
+n_analysis_ready,4,Coincidencias válidas estación-Landsat
+roi_date_start,2025-08-03,Primera fecha Landsat ROI
+roi_date_end,2026-01-10,Última fecha Landsat ROI
+analysis_date_start,2025-11-07,Primera fecha usada en análisis
+analysis_date_end,2025-12-17,Última fecha usada en análisis
+valid_pixel_pct_median_roi,0.0,Mediana de píxeles válidos en todas las escenas ROI
+valid_pixel_pct_max_roi,98.06985294117644,Máximo porcentaje de píxeles válidos
+mean_valid_pixel_pct_analysis,93.48927696078428,Promedio de píxeles válidos en fechas analysis-ready
+mean_lst_c_analysis,29.12450152123844,LST media en fechas analysis-ready
+mean_temp_out_analysis,15.287267344700673,Temperatura media exterior en fechas analysis-ready
+mean_lst_minus_ta_analysis,13.83723417653777,Diferencia media LST - temperatura del aire
+min_lst_minus_ta_analysis,13.205885584496055,Mínima diferencia LST - temperatura del aire
+max_lst_minus_ta_analysis,14.988241744462451,Máxima diferencia LST - temperatura del aire

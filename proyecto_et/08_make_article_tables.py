@@ -72,7 +72,6 @@ ROUND_3_COLS = [
     "bias",
     "pearson_r",
     "spearman_rho",
-    "value",
 ]
 
 
@@ -255,8 +254,13 @@ def build_dataset_description(
 ) -> pd.DataFrame:
     rows: list[dict] = []
 
-    date_min = analysis["date"].min() if "date" in analysis.columns and not analysis.empty else pd.NaT
-    date_max = analysis["date"].max() if "date" in analysis.columns and not analysis.empty else pd.NaT
+    if "date" in analysis.columns and not analysis.empty:
+        analysis["date"] = pd.to_datetime(analysis["date"], errors="coerce")
+        date_min = analysis["date"].min()
+        date_max = analysis["date"].max()
+    else:
+        date_min = pd.NaT
+        date_max = pd.NaT
 
     def add_metric(metric: str, value) -> None:
         rows.append({"metric": metric, "value": value})
@@ -295,7 +299,18 @@ def build_dataset_description(
         add_metric("n_selected_from_duplicates_false", int((~series).sum()))
 
     out = pd.DataFrame(rows)
-    out = round_numeric_columns(out, ["value"], decimals=3)
+
+        # Redondear solo los valores que realmente sean numéricos,
+        # sin convertir fechas de la columna value a NaN.
+    def format_value(v):
+        if pd.isna(v):
+            return ""
+        if isinstance(v, (int, float, np.integer, np.floating)):
+            return round(float(v), 3)
+        return v
+
+    out["value"] = out["value"].apply(format_value)
+
     return out
 
 

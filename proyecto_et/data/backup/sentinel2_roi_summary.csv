@@ -1,0 +1,8 @@
+metric,value
+n_images,102.0
+n_valid_images,35.0
+mean_valid_pixel_pct,28.51646659020363
+mean_ndvi,0.46375853885270624
+mean_evi,0.3761499858048125
+mean_savi,0.31002743252215786
+mean_ndre,0.3200639380946063

@@ -1,0 +1,41 @@
+{
+  "method": "dynamic_kc_from_observed_vi_range",
+  "interpretation": "exploratory_relative_kc_not_calibrated_universal",
+  "kc_min": 0.7,
+  "kc_max": 1.05,
+  "main_vi": "SAVI",
+  "comparison_vi": "NDVI",
+  "buffer_meters": 300,
+  "reduce_scale_meters": 10,
+  "export_to_drive": true,
+  "drive_folder": "proyecto_et_kc_maps",
+  "vi_ranges": {
+    "SAVI": {
+      "min": 0.2141612811411734,
+      "max": 0.4267025767437696,
+      "source_column": "SAVI_mean",
+      "source": "station_sentinel_analysis_ready_observed_range"
+    },
+    "NDVI": {
+      "min": 0.3344628041606456,
+      "max": 0.5608229997836471,
+      "source_column": "NDVI_mean",
+      "source": "station_sentinel_analysis_ready_observed_range"
+    },
+    "EVI": {
+      "min": 0.2685498620067851,
+      "max": 0.5358145518879986,
+      "source_column": "EVI_mean",
+      "source": "station_sentinel_analysis_ready_observed_range"
+    },
+    "NDRE": {
+      "min": 0.2250747348582453,
+      "max": 0.412323320341461,
+      "source_column": "NDRE_mean",
+      "source": "station_sentinel_analysis_ready_observed_range"
+    }
+  },
+  "n_analysis_dates": 8,
+  "date_start": "2025-08-20",
+  "date_end": "2025-12-28"
+}

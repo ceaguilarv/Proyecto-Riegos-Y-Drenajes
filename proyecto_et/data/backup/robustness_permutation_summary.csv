@@ -1,0 +1,2 @@
+target,predictor,n,n_permutations,observed_pearson_r,observed_abs_pearson_r,observed_r2_from_r,null_mean_abs_r,null_p95_abs_r,null_p99_abs_r,empirical_p_two_sided
+et_base_out_mm_d,SAVI_mean,9,10000,0.8141474610745223,0.8141474610745223,0.6628360883740908,0.28671818069348265,0.6609080951457366,0.8015614301661312,0.0086991300869913

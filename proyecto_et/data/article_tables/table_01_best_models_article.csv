@@ -1,8 +1,8 @@
 article_rank,target,target_label,target_group,predictor,predictor_label,n,pearson_r,spearman_rho,r2,rmse,mae,bias,slope,intercept,equation,interpretation_note
-1,et_base_out_mm_d,ET diaria (mismo día),mismo_dia,SAVI_mean,SAVI,9,0.814,0.683,0.663,0.223,0.204,-0.0,3.929,1.149,ET = 1.149 + 3.929 × SAVI,relacion relativamente fuerte
-2,et_base_out_mm_d_w5_mean,ET media móvil 5 días (incluye día satelital),media_movil,NDVI_mean,NDVI,9,0.67,0.636,0.449,0.117,0.099,0.0,1.283,1.512,ET = 1.512 + 1.283 × NDVI,relacion moderada
-3,et_base_out_mm_d_w3_mean,ET media móvil 3 días (incluye día satelital),media_movil,NDVI_mean,NDVI,9,0.601,0.667,0.361,0.115,0.092,-0.0,1.042,1.702,ET = 1.702 + 1.042 × NDVI,relacion moderada
-4,et_base_out_mm_d_w7_mean,ET media móvil 7 días (incluye día satelital),media_movil,NDVI_mean,NDVI,9,0.597,0.467,0.357,0.112,0.094,-0.0,1.009,1.602,ET = 1.602 + 1.009 × NDVI,relacion moderada
-5,et_base_out_mm_d_w7_sum,ET acumulada 7 días (incluye día satelital),acumulada,NDRE_mean,NDRE,9,-0.294,-0.167,0.087,3.241,2.417,0.0,-15.155,18.45,ET = 18.450 - 15.155 × NDRE,relacion debil o exploratoria
-6,et_base_out_mm_d_w5_sum,ET acumulada 5 días (incluye día satelital),acumulada,NDRE_mean,NDRE,9,-0.181,0.184,0.033,2.127,1.529,0.0,-5.928,11.886,ET = 11.886 - 5.928 × NDRE,relacion debil o exploratoria
-7,et_base_out_mm_d_w3_sum,ET acumulada 3 días (incluye día satelital),acumulada,EVI_mean,EVI,9,0.113,0.367,0.013,0.86,0.545,-0.0,1.039,5.965,ET = 5.965 + 1.039 × EVI,relacion debil o exploratoria
+1,et_base_out_mm_d,ET diaria (mismo día),mismo_dia,SAVI_mean,SAVI,8,0.9,0.833,0.81,0.173,0.146,0.0,5.137,0.773,ET = 0.773 + 5.137 × SAVI,relacion relativamente fuerte
+2,et_base_out_mm_d_w5_mean,ET media móvil 5 días (incluye día satelital),media_movil,NDVI_mean,NDVI,8,0.743,0.714,0.552,0.121,0.105,-0.0,1.562,1.375,ET = 1.375 + 1.562 × NDVI,relacion relativamente fuerte
+3,et_base_out_mm_d_w5_sum,ET acumulada 5 días (incluye día satelital),acumulada,NDVI_mean,NDVI,8,0.743,0.714,0.552,0.605,0.524,-0.0,7.811,6.873,ET = 6.873 + 7.811 × NDVI,relacion relativamente fuerte
+4,et_base_out_mm_d_w3_sum,ET acumulada 3 días (incluye día satelital),acumulada,NDVI_mean,NDVI,8,0.715,0.762,0.511,0.328,0.286,-0.0,3.892,4.786,ET = 4.786 + 3.892 × NDVI,relacion relativamente fuerte
+5,et_base_out_mm_d_w3_mean,ET media móvil 3 días (incluye día satelital),media_movil,NDVI_mean,NDVI,8,0.715,0.762,0.511,0.109,0.095,0.0,1.297,1.595,ET = 1.595 + 1.297 × NDVI,relacion relativamente fuerte
+6,et_base_out_mm_d_w7_mean,ET media móvil 7 días (incluye día satelital),media_movil,NDVI_mean,NDVI,8,0.607,0.476,0.368,0.118,0.1,0.0,1.043,1.589,ET = 1.589 + 1.043 × NDVI,relacion moderada
+7,et_base_out_mm_d_w7_sum,ET acumulada 7 días (incluye día satelital),acumulada,NDVI_mean,NDVI,8,0.607,0.476,0.368,0.824,0.702,0.0,7.303,11.123,ET = 11.123 + 7.303 × NDVI,relacion moderada
