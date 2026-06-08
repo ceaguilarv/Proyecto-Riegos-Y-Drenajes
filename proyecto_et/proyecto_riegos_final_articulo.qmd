@@ -262,6 +262,13 @@ La ETc espacial generada en este trabajo no debe interpretarse como una medició
 - Evaluar el método en otras coberturas o cultivos para explorar la transferencia de la metodología.
 - Incorporar mediciones independientes de ET real, como lisímetro o balance hídrico controlado, para validar el Kc dinámico y la ETc espacial.
 
+## Disponibilidad de datos, código y reproducibilidad
+Con el fin de favorecer la transparencia metodológica, la trazabilidad del procesamiento y la reproducibilidad de los resultados, los scripts, insumos procesados, tablas, figuras y documentación técnica del proyecto se encuentran disponibles en un repositorio público de GitHub:
+
+[Repositorio público del proyecto en GitHub](https://github.com/ceaguilarv/Proyecto-Riegos-Y-Drenajes)
+
+El repositorio contiene el flujo de trabajo implementado en Python y Google Earth Engine para la depuración de la estación meteorológica, el procesamiento de Sentinel-2, el diagnóstico térmico Landsat/LST, la construcción del Kc dinámico, la generación de ETc espacial exploratoria y la elaboración de tablas y figuras finales. Los productos se comparten bajo un enfoque de ciencia abierta, reconociendo que la interpretación de los resultados depende de los supuestos metodológicos documentados, la calidad de los datos meteorológicos disponibles y la disponibilidad efectiva de imágenes satelitales válidas.
+
 # Referencias
 
 Allen, R. G., Pereira, L. S., Raes, D., & Smith, M. (1998). *Crop evapotranspiration: Guidelines for computing crop water requirements*. FAO Irrigation and Drainage Paper 56.
