@@ -36,6 +36,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="proyecto_riegos_final_articulo_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="proyecto_riegos_final_articulo_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -145,7 +146,7 @@ window.Quarto = {
 
 <section id="resumen" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Resumen</h1>
-<p>Este trabajo evaluó la integración entre datos meteorológicos de superficie y productos derivados de sensores remotos para construir una aproximación exploratoria de coeficiente de cultivo dinámico (Kc) y evapotranspiración del cultivo espacializada (ETc) en una cobertura de pasturas alrededor de una estación meteorológica. La serie meteorológica fue depurada y corregida temporalmente, obteniendo 158 días diarios entre el 30 de julio de 2025 y el 13 de enero de 2026, de los cuales 143 fueron considerados válidos para análisis. A partir de Sentinel-2 se evaluaron índices espectrales como NDVI, EVI, SAVI y NDRE, y se encontró que SAVI presentó la asociación más fuerte con la ET diaria de estación en el mismo día (n = 8; r = 0.900; R² = 0.810; RMSE = 0.173 mm día<sup>-1</sup>). Posteriormente, se construyó un Kc dinámico exploratorio basado principalmente en SAVI, escalado entre 0.70 y 1.05, y se generó una ETc espacial como el producto entre la ET base de estación y el Kc dinámico. El análisis espacial fue refinado mediante un AOI limpio de pasturas y la exclusión de construcciones y superficies duras, lo cual permitió reducir interferencias espectrales. La rama Landsat/LST se conservó como diagnóstico térmico complementario debido a la baja disponibilidad de escenas válidas (n = 4). Los resultados muestran que el método es viable como aproximación exploratoria y reproducible, aunque su robustez depende de una mayor continuidad de datos meteorológicos y de una mayor disponibilidad de imágenes satelitales válidas.</p>
+<p>Este trabajo evaluó la integración entre datos meteorológicos de superficie y productos derivados de sensores remotos para construir una aproximación exploratoria de coeficiente de cultivo dinámico (Kc) y evapotranspiración del cultivo espacializada (ETc) en una cobertura de pasturas alrededor de una estación meteorológica. La serie meteorológica fue depurada y corregida temporalmente, obteniendo 158 días entre el 30 de julio de 2025 y el 13 de enero de 2026, de los cuales 143 fueron considerados válidos para análisis. A partir de Sentinel-2 se evaluaron índices espectrales como NDVI, EVI, SAVI y NDRE, y se encontró que SAVI presentó la asociación más fuerte con la ET diaria de estación en el mismo día (n = 8; r = 0.900; R² = 0.810; RMSE = 0.173 mm día<sup>-1</sup>). Posteriormente, se construyó un Kc dinámico exploratorio basado principalmente en SAVI, escalado entre 0.70 y 1.05, y se generó una ETc espacial como el producto entre la ET base de estación y el Kc dinámico. El análisis espacial fue refinado mediante un AOI limpio de pasturas y la exclusión de construcciones y superficies duras, lo cual permitió reducir interferencias espectrales. La rama Landsat/LST se conservó como diagnóstico térmico complementario debido a la baja disponibilidad de escenas válidas (n = 4). Los resultados muestran que el método es viable como aproximación exploratoria y reproducible, aunque su robustez depende de una mayor continuidad de datos meteorológicos y de una mayor disponibilidad de imágenes satelitales válidas.</p>
 <p><strong>Palabras clave:</strong> evapotranspiración, Kc dinámico, Sentinel-2, SAVI, pasturas, estación meteorológica, riego, ETc espacial.</p>
 </section>
 <section id="introducción" class="level1" data-number="2">
@@ -181,7 +182,7 @@ window.Quarto = {
 <img src="data/article_figures/maps_qgis/exports_png/fig_map01_localizacion_area_estudio.png" class="img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-localizacion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;1: Localización del área de estudio, estación meteorológica, buffer inicial de 300 m y AOI final de pasturas. Esta unidad espacial permitió relacionar la señal puntual de estación con variables espectrales derivadas de Sentinel-2.
+Figura&nbsp;1: Localización del área de estudio, estación meteorológica y buffer inicial de 300 m. Esta unidad espacial permitió relacionar la señal puntual de estación con variables espectrales derivadas de Sentinel-2.
 </figcaption>
 </figure>
 </div>
