@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carlos Esteban Aguilar Vargas">
+<meta name="author" content="Augusto José Niño">
+<meta name="author" content="Andrés Camilo Rubiano">
+
+<title>Monitoreo espacial exploratorio de ETc y Kc dinámico para apoyo a decisiones de riego mediante estación meteorológica y Sentinel-2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="proyecto_riegos_nuevo_enfoque_files/libs/clipboard/clipboard.min.js"></script>
+<script src="proyecto_riegos_nuevo_enfoque_files/libs/quarto-html/quarto.js"></script>
+<script src="proyecto_riegos_nuevo_enfoque_files/libs/quarto-html/popper.min.js"></script>
+<script src="proyecto_riegos_nuevo_enfoque_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="proyecto_riegos_nuevo_enfoque_files/libs/quarto-html/anchor.min.js"></script>
+<link href="proyecto_riegos_nuevo_enfoque_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="proyecto_riegos_nuevo_enfoque_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="proyecto_riegos_nuevo_enfoque_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="proyecto_riegos_nuevo_enfoque_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="proyecto_riegos_nuevo_enfoque_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#resumen" id="toc-resumen" class="nav-link active" data-scroll-target="#resumen"><span class="header-section-number">1</span> Resumen</a></li>
+  <li><a href="#resumen-ejecutivo-para-el-equipo" id="toc-resumen-ejecutivo-para-el-equipo" class="nav-link" data-scroll-target="#resumen-ejecutivo-para-el-equipo"><span class="header-section-number">2</span> Resumen ejecutivo para el equipo</a></li>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link" data-scroll-target="#introducción"><span class="header-section-number">3</span> Introducción</a></li>
+  <li><a href="#planteamiento-del-problema" id="toc-planteamiento-del-problema" class="nav-link" data-scroll-target="#planteamiento-del-problema"><span class="header-section-number">4</span> Planteamiento del problema</a></li>
+  <li><a href="#objetivos" id="toc-objetivos" class="nav-link" data-scroll-target="#objetivos"><span class="header-section-number">5</span> Objetivos</a>
+  <ul class="collapse">
+  <li><a href="#objetivo-general" id="toc-objetivo-general" class="nav-link" data-scroll-target="#objetivo-general"><span class="header-section-number">5.1</span> Objetivo general</a></li>
+  <li><a href="#objetivos-específicos" id="toc-objetivos-específicos" class="nav-link" data-scroll-target="#objetivos-específicos"><span class="header-section-number">5.2</span> Objetivos específicos</a></li>
+  </ul></li>
+  <li><a href="#marco-conceptual" id="toc-marco-conceptual" class="nav-link" data-scroll-target="#marco-conceptual"><span class="header-section-number">6</span> Marco conceptual</a>
+  <ul class="collapse">
+  <li><a href="#evapotranspiración-eto-etc-y-kc" id="toc-evapotranspiración-eto-etc-y-kc" class="nav-link" data-scroll-target="#evapotranspiración-eto-etc-y-kc"><span class="header-section-number">6.1</span> Evapotranspiración, ETo, ETc y Kc</a></li>
+  <li><a href="#índices-espectrales-y-monitoreo-de-vegetación" id="toc-índices-espectrales-y-monitoreo-de-vegetación" class="nav-link" data-scroll-target="#índices-espectrales-y-monitoreo-de-vegetación"><span class="header-section-number">6.2</span> Índices espectrales y monitoreo de vegetación</a></li>
+  <li><a href="#kc-derivado-de-sensores-remotos" id="toc-kc-derivado-de-sensores-remotos" class="nav-link" data-scroll-target="#kc-derivado-de-sensores-remotos"><span class="header-section-number">6.3</span> Kc derivado de sensores remotos</a></li>
+  <li><a href="#landsatlst-y-diagnóstico-térmico" id="toc-landsatlst-y-diagnóstico-térmico" class="nav-link" data-scroll-target="#landsatlst-y-diagnóstico-térmico"><span class="header-section-number">6.4</span> Landsat/LST y diagnóstico térmico</a></li>
+  </ul></li>
+  <li><a href="#materiales-y-métodos" id="toc-materiales-y-métodos" class="nav-link" data-scroll-target="#materiales-y-métodos"><span class="header-section-number">7</span> Materiales y métodos</a>
+  <ul class="collapse">
+  <li><a href="#área-de-estudio" id="toc-área-de-estudio" class="nav-link" data-scroll-target="#área-de-estudio"><span class="header-section-number">7.1</span> Área de estudio</a></li>
+  <li><a href="#datos-meteorológicos" id="toc-datos-meteorológicos" class="nav-link" data-scroll-target="#datos-meteorológicos"><span class="header-section-number">7.2</span> Datos meteorológicos</a></li>
+  <li><a href="#datos-sentinel-2" id="toc-datos-sentinel-2" class="nav-link" data-scroll-target="#datos-sentinel-2"><span class="header-section-number">7.3</span> Datos Sentinel-2</a></li>
+  <li><a href="#datos-landsatlst" id="toc-datos-landsatlst" class="nav-link" data-scroll-target="#datos-landsatlst"><span class="header-section-number">7.4</span> Datos Landsat/LST</a></li>
+  <li><a href="#flujo-metodológico" id="toc-flujo-metodológico" class="nav-link" data-scroll-target="#flujo-metodológico"><span class="header-section-number">7.5</span> Flujo metodológico</a></li>
+  <li><a href="#relación-etíndices-espectrales" id="toc-relación-etíndices-espectrales" class="nav-link" data-scroll-target="#relación-etíndices-espectrales"><span class="header-section-number">7.6</span> Relación ET–índices espectrales</a></li>
+  <li><a href="#construcción-del-kc-dinámico" id="toc-construcción-del-kc-dinámico" class="nav-link" data-scroll-target="#construcción-del-kc-dinámico"><span class="header-section-number">7.7</span> Construcción del Kc dinámico</a></li>
+  <li><a href="#cálculo-de-etc-espacial" id="toc-cálculo-de-etc-espacial" class="nav-link" data-scroll-target="#cálculo-de-etc-espacial"><span class="header-section-number">7.8</span> Cálculo de ETc espacial</a></li>
+  </ul></li>
+  <li><a href="#resultados" id="toc-resultados" class="nav-link" data-scroll-target="#resultados"><span class="header-section-number">8</span> Resultados</a>
+  <ul class="collapse">
+  <li><a href="#disponibilidad-y-calidad-de-datos" id="toc-disponibilidad-y-calidad-de-datos" class="nav-link" data-scroll-target="#disponibilidad-y-calidad-de-datos"><span class="header-section-number">8.1</span> Disponibilidad y calidad de datos</a></li>
+  <li><a href="#relación-entre-et-diaria-e-índices-sentinel-2" id="toc-relación-entre-et-diaria-e-índices-sentinel-2" class="nav-link" data-scroll-target="#relación-entre-et-diaria-e-índices-sentinel-2"><span class="header-section-number">8.2</span> Relación entre ET diaria e índices Sentinel-2</a></li>
+  <li><a href="#kc-dinámico-espacial" id="toc-kc-dinámico-espacial" class="nav-link" data-scroll-target="#kc-dinámico-espacial"><span class="header-section-number">8.3</span> Kc dinámico espacial</a></li>
+  <li><a href="#etc-espacial-exploratoria" id="toc-etc-espacial-exploratoria" class="nav-link" data-scroll-target="#etc-espacial-exploratoria"><span class="header-section-number">8.4</span> ETc espacial exploratoria</a></li>
+  <li><a href="#diagnóstico-landsatlst" id="toc-diagnóstico-landsatlst" class="nav-link" data-scroll-target="#diagnóstico-landsatlst"><span class="header-section-number">8.5</span> Diagnóstico Landsat/LST</a></li>
+  </ul></li>
+  <li><a href="#discusión" id="toc-discusión" class="nav-link" data-scroll-target="#discusión"><span class="header-section-number">9</span> Discusión</a>
+  <ul class="collapse">
+  <li><a href="#de-una-medición-puntual-a-una-superficie-de-manejo" id="toc-de-una-medición-puntual-a-una-superficie-de-manejo" class="nav-link" data-scroll-target="#de-una-medición-puntual-a-una-superficie-de-manejo"><span class="header-section-number">9.1</span> De una medición puntual a una superficie de manejo</a></li>
+  <li><a href="#por-qué-savi-fue-relevante" id="toc-por-qué-savi-fue-relevante" class="nav-link" data-scroll-target="#por-qué-savi-fue-relevante"><span class="header-section-number">9.2</span> Por qué SAVI fue relevante</a></li>
+  <li><a href="#alcance-del-kc-dinámico" id="toc-alcance-del-kc-dinámico" class="nav-link" data-scroll-target="#alcance-del-kc-dinámico"><span class="header-section-number">9.3</span> Alcance del Kc dinámico</a></li>
+  <li><a href="#importancia-del-aoi-limpio" id="toc-importancia-del-aoi-limpio" class="nav-link" data-scroll-target="#importancia-del-aoi-limpio"><span class="header-section-number">9.4</span> Importancia del AOI limpio</a></li>
+  <li><a href="#landsatlst-como-complemento-no-como-resultado-principal" id="toc-landsatlst-como-complemento-no-como-resultado-principal" class="nav-link" data-scroll-target="#landsatlst-como-complemento-no-como-resultado-principal"><span class="header-section-number">9.5</span> Landsat/LST como complemento, no como resultado principal</a></li>
+  <li><a href="#aplicación-en-riego" id="toc-aplicación-en-riego" class="nav-link" data-scroll-target="#aplicación-en-riego"><span class="header-section-number">9.6</span> Aplicación en riego</a></li>
+  <li><a href="#aprendizaje-automático-como-trabajo-futuro" id="toc-aprendizaje-automático-como-trabajo-futuro" class="nav-link" data-scroll-target="#aprendizaje-automático-como-trabajo-futuro"><span class="header-section-number">9.7</span> Aprendizaje automático como trabajo futuro</a></li>
+  </ul></li>
+  <li><a href="#conclusiones" id="toc-conclusiones" class="nav-link" data-scroll-target="#conclusiones"><span class="header-section-number">10</span> Conclusiones</a></li>
+  <li><a href="#recomendaciones" id="toc-recomendaciones" class="nav-link" data-scroll-target="#recomendaciones"><span class="header-section-number">11</span> Recomendaciones</a></li>
+  <li><a href="#ciencia-abierta-y-reproducibilidad" id="toc-ciencia-abierta-y-reproducibilidad" class="nav-link" data-scroll-target="#ciencia-abierta-y-reproducibilidad"><span class="header-section-number">12</span> Ciencia abierta y reproducibilidad</a></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias"><span class="header-section-number">13</span> Referencias</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Otros formatos</h2><ul><li><a href="proyecto_riegos_nuevo_enfoque.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Monitoreo espacial exploratorio de ETc y Kc dinámico para apoyo a decisiones de riego mediante estación meteorológica y Sentinel-2</h1>
+<p class="subtitle lead">Caso de estudio en cobertura de pasturas — Universidad Nacional de Colombia, Bogotá D.C.</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Autores/as</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carlos Esteban Aguilar Vargas </p>
+             <p>Augusto José Niño </p>
+             <p>Andrés Camilo Rubiano </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="resumen" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Resumen</h1>
+<p>La evapotranspiración del cultivo (ETc) es una variable central para estimar demanda hídrica y apoyar la programación del riego. Sin embargo, en muchos ejercicios prácticos de riego la información meteorológica se obtiene desde una estación puntual, mientras que el cultivo y la cobertura vegetal presentan variabilidad espacial. Esta diferencia entre medición puntual y superficie de manejo crea una limitación operativa: una estación permite estimar la demanda atmosférica, pero no describe por sí sola cómo cambia la respuesta de la cobertura dentro del área de estudio. En este contexto, el presente trabajo desarrolló un flujo metodológico exploratorio para espacializar la ETc en una cobertura de pasturas mediante la integración de una estación meteorológica, índices espectrales Sentinel-2 y un coeficiente de cultivo dinámico (Kc) derivado del estado espectral de la vegetación.</p>
+<p>El estudio se estructuró como un proyecto práctico reproducible. Primero se depuró la estación meteorológica y se consolidó una serie diaria de 158 días, de los cuales 143 fueron válidos para análisis. Luego se procesaron imágenes Sentinel-2 y se calcularon índices espectrales como NDVI, SAVI, EVI y NDRE. El cruce estación–satélite permitió obtener ocho fechas <em>analysis-ready</em>. Con esas fechas se evaluaron relaciones simples entre la ET diaria de estación y los índices espectrales. SAVI fue el mejor predictor de la ET diaria, con <span class="math inline">\(R^2 = 0.810\)</span>, <span class="math inline">\(r = 0.900\)</span> y RMSE = 0.173 mm día<span class="math inline">\(^{-1}\)</span>. A partir del rango observado de SAVI se construyó un Kc dinámico exploratorio, escalado entre 0.70 y 1.05, y posteriormente se calculó la ETc espacial como el producto entre la ET base diaria de estación y el Kc dinámico.</p>
+<p>En el AOI limpio de pasturas, el Kc medio basado en SAVI varió entre 0.819 y 0.986, mientras que la ETc media espacial varió entre 1.475 y 2.851 mm día<span class="math inline">\(^{-1}\)</span> en las fechas seleccionadas. Landsat/LST se evaluó como complemento térmico, pero su baja disponibilidad efectiva (4 escenas válidas de 18) restringió su uso a un diagnóstico descriptivo. El principal aporte del ejercicio no consiste en afirmar una medición directa de ET real desde satélite, sino en demostrar una ruta reproducible para transformar una señal meteorológica puntual en mapas exploratorios de demanda hídrica relativa. La metodología puede apoyar decisiones de riego al identificar zonas con distinta demanda relativa, aunque requiere ampliar la serie temporal, mejorar la validación de campo e integrar sensores adicionales para avanzar hacia una aplicación operativa robusta.</p>
+<p><strong>Palabras clave:</strong> evapotranspiración del cultivo; Kc dinámico; ETc espacial; Sentinel-2; SAVI; riego; sensores remotos; pasturas; agricultura de precisión.</p>
+</section>
+<section id="resumen-ejecutivo-para-el-equipo" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Resumen ejecutivo para el equipo</h1>
+<p>Este documento acompaña el póster científico y debe leerse como guía técnica del ejercicio. La idea central es sencilla: una estación meteorológica aporta una estimación diaria de la demanda hídrica, pero mide en un punto. El área de pasturas, en cambio, es una superficie heterogénea. Por eso se propuso integrar la ET de estación con información espacial Sentinel-2 para construir mapas exploratorios de Kc dinámico y ETc espacial.</p>
+<p>La lectura aplicada para riego es la siguiente:</p>
+<ol type="1">
+<li><strong>La estación meteorológica</strong> aporta la señal diaria de ET o demanda atmosférica, siguiendo la lógica de la evapotranspiración de referencia y del cultivo ampliamente usada en riego <span class="citation" data-cites="Allen1998FAO56 Pereira2015FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>; <a href="#ref-Pereira2015FAO56" role="doc-biblioref">Pereira et&nbsp;al., 2015</a>)</span>.</li>
+<li><strong>Sentinel-2</strong> aporta variabilidad espacial de la cobertura vegetal mediante índices espectrales como NDVI, SAVI, EVI y NDRE <span class="citation" data-cites="ESA2024Sentinel2 Copernicus2024Sentinel2 Google2024S2SR">(<a href="#ref-Copernicus2024Sentinel2" role="doc-biblioref">Copernicus Data Space Ecosystem, 2024</a>; <a href="#ref-ESA2024Sentinel2" role="doc-biblioref">European Space Agency, 2024</a>; <a href="#ref-Google2024S2SR" role="doc-biblioref">Google Earth Engine Data Catalog, 2024</a>)</span>.</li>
+<li><strong>SAVI</strong> fue el índice que mejor explicó la ET diaria en la muestra disponible, lo cual es coherente con su diseño para reducir parcialmente la influencia del suelo en coberturas con mezcla suelo–vegetación <span class="citation" data-cites="Huete1988SAVI USGS2024LandsatST">(<a href="#ref-Huete1988SAVI" role="doc-biblioref">Huete, 1988</a>; <a href="#ref-USGS2024LandsatST" role="doc-biblioref">U.S. Geological Survey, 2024b</a>)</span>.</li>
+<li><strong>El Kc dinámico</strong> se interpretó como un coeficiente relativo y exploratorio, no como un Kc universal calibrado. Su función fue espacializar la variabilidad de la cobertura dentro del AOI <span class="citation" data-cites="Glenn2011KcVI Kamble2013Kc Poczas2015Kc">(<a href="#ref-Glenn2011KcVI" role="doc-biblioref">Glenn et&nbsp;al., 2011</a>; <a href="#ref-Kamble2013Kc" role="doc-biblioref">Kamble et&nbsp;al., 2013</a>; <a href="#ref-Poczas2015Kc" role="doc-biblioref">Pôças et&nbsp;al., 2015</a>)</span>.</li>
+<li><strong>La ETc espacial</strong> se obtuvo multiplicando la ET base diaria de estación por el Kc dinámico. Por tanto, no es una medición directa de ET real; es una espacialización exploratoria útil para interpretar demanda hídrica relativa.</li>
+<li><strong>La utilidad práctica</strong> está en apoyar la priorización de sectores de riego, el seguimiento de coberturas y la identificación de zonas con mayor o menor demanda relativa.</li>
+</ol>
+</section>
+<section id="introducción" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Introducción</h1>
+<p>La programación del riego depende de la capacidad de estimar cuánta agua demanda el sistema suelo–planta–atmósfera. En la teoría clásica de riego, la evapotranspiración integra la evaporación desde el suelo y la transpiración de la planta, por lo que representa una de las salidas principales del balance hídrico agrícola <span class="citation" data-cites="Allen1998FAO56 Pereira2015FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>; <a href="#ref-Pereira2015FAO56" role="doc-biblioref">Pereira et&nbsp;al., 2015</a>)</span>. Desde el punto de vista ingenieril, estimar ET y ETc permite aproximar necesidades de riego, ajustar frecuencias de aplicación, comparar escenarios de manejo y evaluar el comportamiento de una cobertura bajo condiciones meteorológicas específicas <span class="citation" data-cites="Penman1948 Monteith1965 Allen1998FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>; <a href="#ref-Monteith1965" role="doc-biblioref">Monteith, 1965</a>; <a href="#ref-Penman1948" role="doc-biblioref">Penman, 1948</a>)</span>.</p>
+<p>El enfoque FAO-56 consolidó el uso de la evapotranspiración de referencia (ETo) y de coeficientes de cultivo (Kc) para estimar la evapotranspiración del cultivo mediante la relación general <span class="math inline">\(ET_c = ET_o \times K_c\)</span> <span class="citation" data-cites="Allen1998FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>)</span>. Este marco sigue siendo ampliamente usado porque separa la demanda atmosférica, representada por ETo, de la respuesta particular del cultivo, representada por Kc <span class="citation" data-cites="Pereira2015FAO56">(<a href="#ref-Pereira2015FAO56" role="doc-biblioref">Pereira et&nbsp;al., 2015</a>)</span>. Sin embargo, en condiciones reales de campo, el Kc no es necesariamente constante en el espacio: depende del estado fenológico, cobertura, densidad vegetal, humedad, suelo, manejo y heterogeneidad del lote <span class="citation" data-cites="Glenn2011KcVI Kamble2013Kc Poczas2015Kc">(<a href="#ref-Glenn2011KcVI" role="doc-biblioref">Glenn et&nbsp;al., 2011</a>; <a href="#ref-Kamble2013Kc" role="doc-biblioref">Kamble et&nbsp;al., 2013</a>; <a href="#ref-Poczas2015Kc" role="doc-biblioref">Pôças et&nbsp;al., 2015</a>)</span>.</p>
+<p>Una estación meteorológica permite calcular o aproximar la demanda atmosférica en una localización concreta, pero no describe por sí misma la variabilidad espacial del cultivo. Esta limitación es especialmente importante en proyectos de riego, donde las decisiones se aplican sobre superficies y no únicamente sobre puntos. La variabilidad espacial de la cobertura puede generar diferencias en vigor, interceptación de radiación, desarrollo de biomasa y demanda hídrica relativa <span class="citation" data-cites="Glenn2008VI Zou2017Indices Ali2024SiteSpecific">(<a href="#ref-Ali2024SiteSpecific" role="doc-biblioref">Ali et&nbsp;al., 2024</a>; <a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Zou2017Indices" role="doc-biblioref">Zou &amp; Mõttus, 2017</a>)</span>. Por esta razón, los sensores remotos se han convertido en herramientas valiosas para complementar mediciones de estación, especialmente mediante índices espectrales que resumen la respuesta de la vegetación en bandas visibles, borde rojo e infrarrojo cercano <span class="citation" data-cites="Tucker1979 Bannari1995 Xue2017VIReview">(<a href="#ref-Bannari1995" role="doc-biblioref">Bannari et&nbsp;al., 1995</a>; <a href="#ref-Tucker1979" role="doc-biblioref">Tucker, 1979</a>; <a href="#ref-Xue2017VIReview" role="doc-biblioref">Xue &amp; Su, 2017</a>)</span>.</p>
+<p>Sentinel-2 es una misión multiespectral de alta resolución espacial y temporal diseñada para monitoreo terrestre, agrícola y ambiental <span class="citation" data-cites="ESA2024Sentinel2 Copernicus2024Sentinel2">(<a href="#ref-Copernicus2024Sentinel2" role="doc-biblioref">Copernicus Data Space Ecosystem, 2024</a>; <a href="#ref-ESA2024Sentinel2" role="doc-biblioref">European Space Agency, 2024</a>)</span>. Su disponibilidad abierta y sus bandas en el visible, NIR y red-edge permiten calcular índices como NDVI, SAVI, EVI y NDRE, frecuentemente usados para evaluar vigor, cobertura vegetal, variación fenológica y condición relativa de cultivos <span class="citation" data-cites="Tucker1979 Huete1988SAVI Glenn2008VI Xue2017VIReview">(<a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Huete1988SAVI" role="doc-biblioref">Huete, 1988</a>; <a href="#ref-Tucker1979" role="doc-biblioref">Tucker, 1979</a>; <a href="#ref-Xue2017VIReview" role="doc-biblioref">Xue &amp; Su, 2017</a>)</span>. Google Earth Engine facilita el procesamiento reproducible de colecciones satelitales a escala espacial y temporal mediante infraestructura en nube <span class="citation" data-cites="Gorelick2017GEE">(<a href="#ref-Gorelick2017GEE" role="doc-biblioref">Gorelick et&nbsp;al., 2017</a>)</span>, lo cual hace posible construir flujos de trabajo replicables para proyectos de riego y monitoreo agrícola.</p>
+<p>A pesar de estas ventajas, existe una precaución metodológica importante: los índices espectrales no miden ET de manera directa. Los índices de vegetación representan propiedades relacionadas con cobertura, biomasa, verdor, estructura o actividad fotosintética, pero su interpretación depende del contexto y puede estar afectada por suelo, atmósfera, geometría de adquisición, saturación y mezcla espectral <span class="citation" data-cites="Glenn2008VI Bannari1995 Zou2017Indices">(<a href="#ref-Bannari1995" role="doc-biblioref">Bannari et&nbsp;al., 1995</a>; <a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Zou2017Indices" role="doc-biblioref">Zou &amp; Mõttus, 2017</a>)</span>. Por tanto, un enfoque riguroso no debe afirmar que Sentinel-2 “mide ET”, sino que puede ayudar a espacializar una señal meteorológica puntual mediante un coeficiente de cultivo dinámico o relativo <span class="citation" data-cites="Glenn2010ETVI Glenn2011KcVI Pocas2020Review">(<a href="#ref-Glenn2010ETVI" role="doc-biblioref">Glenn et&nbsp;al., 2010</a>; <a href="#ref-Glenn2011KcVI" role="doc-biblioref">Glenn et&nbsp;al., 2011</a>; <a href="#ref-Pocas2020Review" role="doc-biblioref">Pôças et&nbsp;al., 2020</a>)</span>.</p>
+<p>Este proyecto se ubica precisamente en ese punto intermedio: no pretende estimar ET real mediante balance energético completo ni reemplazar la estación meteorológica. Su objetivo es demostrar un flujo práctico para convertir una ET de estación en mapas exploratorios de Kc dinámico y ETc espacial, usando Sentinel-2 como fuente de variabilidad espacial de la cobertura. Este enfoque es útil para una asignatura de riegos y drenajes porque conecta conceptos clásicos de ET, Kc y demanda hídrica con herramientas actuales de teledetección, SIG, programación y ciencia abierta.</p>
+</section>
+<section id="planteamiento-del-problema" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Planteamiento del problema</h1>
+<p>El problema central no es únicamente estimar ET, sino monitorearla espacialmente de forma sistemática y frecuente para apoyar decisiones de riego. En un sistema agrícola o de pasturas, la demanda hídrica puede variar dentro de un mismo lote por diferencias de cobertura, suelo, manejo, sombra, humedad, compactación o vigor vegetal. Una estación meteorológica ubicada en el área de estudio representa una condición puntual de referencia, pero no permite observar esa heterogeneidad espacial.</p>
+<p>En términos prácticos, esto genera una brecha entre medición y decisión. La medición meteorológica es puntual; la decisión de riego se aplica sobre una superficie. Por consiguiente, se requiere un procedimiento que conserve la base física de la estimación meteorológica, pero que incorpore la distribución espacial de la cobertura vegetal. El uso de índices espectrales y Kc derivados de sensores remotos es una aproximación documentada para complementar la estimación de ETc y mapear coeficientes de cultivo <span class="citation" data-cites="Glenn2011KcVI Kamble2013Kc Poczas2015Kc Pocas2020Review">(<a href="#ref-Glenn2011KcVI" role="doc-biblioref">Glenn et&nbsp;al., 2011</a>; <a href="#ref-Kamble2013Kc" role="doc-biblioref">Kamble et&nbsp;al., 2013</a>; <a href="#ref-Poczas2015Kc" role="doc-biblioref">Pôças et&nbsp;al., 2015</a>; <a href="#ref-Pocas2020Review" role="doc-biblioref">Pôças et&nbsp;al., 2020</a>)</span>.</p>
+<p>La dificultad adicional es que la disponibilidad satelital efectiva no depende solo de la misión, sino de la nubosidad, sombras, calidad de píxeles, coincidencia temporal con datos meteorológicos válidos y correcta delimitación del área de análisis <span class="citation" data-cites="Copernicus2024Sentinel2 Gorelick2017GEE">(<a href="#ref-Copernicus2024Sentinel2" role="doc-biblioref">Copernicus Data Space Ecosystem, 2024</a>; <a href="#ref-Gorelick2017GEE" role="doc-biblioref">Gorelick et&nbsp;al., 2017</a>)</span>. Por tanto, el proyecto también aborda una dimensión metodológica: construir un flujo reproducible que documente qué datos son válidos, cuántas observaciones quedan disponibles y qué tan prudente debe ser la interpretación de los resultados.</p>
+</section>
+<section id="objetivos" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Objetivos</h1>
+<section id="objetivo-general" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="objetivo-general"><span class="header-section-number">5.1</span> Objetivo general</h2>
+<p>Desarrollar y evaluar un flujo metodológico reproducible para espacializar la ETc en una cobertura de pasturas, integrando datos de estación meteorológica, índices espectrales Sentinel-2 y un Kc dinámico exploratorio, con aplicación potencial al apoyo de decisiones de riego.</p>
+</section>
+<section id="objetivos-específicos" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="objetivos-específicos"><span class="header-section-number">5.2</span> Objetivos específicos</h2>
+<ol type="1">
+<li>Depurar y consolidar una serie diaria de estación meteorológica útil para análisis de ET.</li>
+<li>Procesar imágenes Sentinel-2 y calcular índices espectrales representativos de la cobertura vegetal.</li>
+<li>Evaluar la relación entre la ET diaria de estación y los índices espectrales Sentinel-2.</li>
+<li>Construir un Kc dinámico exploratorio basado en el rango observado del índice con mejor desempeño.</li>
+<li>Generar mapas de ETc espacial como una espacialización de la ET de estación modulada por Kc dinámico.</li>
+<li>Refinar el área de análisis mediante un AOI limpio de pasturas, excluyendo construcciones y superficies duras.</li>
+<li>Incorporar Landsat/LST como diagnóstico térmico complementario, sin forzar inferencias cuando la disponibilidad de escenas válidas sea insuficiente.</li>
+<li>Documentar el flujo en un esquema reproducible y abierto para facilitar revisión, réplica y mejora futura.</li>
+</ol>
+</section>
+</section>
+<section id="marco-conceptual" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Marco conceptual</h1>
+<section id="evapotranspiración-eto-etc-y-kc" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="evapotranspiración-eto-etc-y-kc"><span class="header-section-number">6.1</span> Evapotranspiración, ETo, ETc y Kc</h2>
+<p>La evapotranspiración es la combinación de evaporación desde superficies húmedas y transpiración vegetal. En agricultura, su estimación es esencial porque permite aproximar requerimientos de agua y programar el riego <span class="citation" data-cites="Allen1998FAO56 Pereira2015FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>; <a href="#ref-Pereira2015FAO56" role="doc-biblioref">Pereira et&nbsp;al., 2015</a>)</span>. El método FAO-56 separa la estimación en dos componentes: la evapotranspiración de referencia, que representa la demanda atmosférica sobre una superficie de referencia, y el coeficiente de cultivo, que ajusta esa demanda al cultivo o cobertura específica <span class="citation" data-cites="Allen1998FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>)</span>.</p>
+<p>En forma simplificada:</p>
+<p><span class="math display">\[
+ET_c = ET_o \times K_c
+\]</span></p>
+<p>En este proyecto se trabajó con una lógica análoga, pero exploratoria: la estación meteorológica aportó la ET base diaria y Sentinel-2 aportó la variabilidad espacial del Kc. Por esta razón, el resultado se define como ETc espacial exploratoria y no como ET real medida directamente.</p>
+</section>
+<section id="índices-espectrales-y-monitoreo-de-vegetación" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="índices-espectrales-y-monitoreo-de-vegetación"><span class="header-section-number">6.2</span> Índices espectrales y monitoreo de vegetación</h2>
+<p>Los índices de vegetación resumen contrastes entre bandas espectrales sensibles al verdor, estructura y actividad de la vegetación <span class="citation" data-cites="Tucker1979 Bannari1995">(<a href="#ref-Bannari1995" role="doc-biblioref">Bannari et&nbsp;al., 1995</a>; <a href="#ref-Tucker1979" role="doc-biblioref">Tucker, 1979</a>)</span>. NDVI es uno de los índices más usados porque relaciona reflectancia en el infrarrojo cercano y el rojo, lo cual suele asociarse con vigor y cobertura verde <span class="citation" data-cites="Tucker1979">(<a href="#ref-Tucker1979" role="doc-biblioref">Tucker, 1979</a>)</span>. Sin embargo, NDVI puede saturarse en coberturas densas y puede ser sensible a efectos de suelo y atmósfera <span class="citation" data-cites="Glenn2008VI Zou2017Indices">(<a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Zou2017Indices" role="doc-biblioref">Zou &amp; Mõttus, 2017</a>)</span>.</p>
+<p>SAVI fue propuesto para reducir parcialmente la influencia del brillo del suelo mediante un factor de corrección <span class="math inline">\(L\)</span> <span class="citation" data-cites="Huete1988SAVI">(<a href="#ref-Huete1988SAVI" role="doc-biblioref">Huete, 1988</a>)</span>. Esta característica es relevante en coberturas donde existe mezcla entre vegetación, suelo desnudo o variaciones de cobertura. La fórmula general usada con <span class="math inline">\(L=0.5\)</span> es:</p>
+<p><span class="math display">\[
+SAVI = \frac{(NIR - Red)}{(NIR + Red + L)}(1+L)
+\]</span></p>
+<p>EVI y NDRE también aportan información complementaria. EVI busca mejorar la sensibilidad en vegetación densa y reducir algunos efectos atmosféricos, mientras que NDRE utiliza el borde rojo y puede ser útil para detectar variaciones de clorofila o vigor en ciertas coberturas <span class="citation" data-cites="Glenn2008VI Xue2017VIReview Zou2017Indices">(<a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Xue2017VIReview" role="doc-biblioref">Xue &amp; Su, 2017</a>; <a href="#ref-Zou2017Indices" role="doc-biblioref">Zou &amp; Mõttus, 2017</a>)</span>. En consecuencia, aunque SAVI resultó el mejor predictor en este ejercicio, una evolución natural del proyecto sería integrar varios índices en modelos multivariables o de aprendizaje automático cuando exista mayor tamaño muestral <span class="citation" data-cites="Ali2024SiteSpecific Chang2025ML">(<a href="#ref-Ali2024SiteSpecific" role="doc-biblioref">Ali et&nbsp;al., 2024</a>; <a href="#ref-Chang2025ML" role="doc-biblioref">Chang et&nbsp;al., 2025</a>)</span>.</p>
+</section>
+<section id="kc-derivado-de-sensores-remotos" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="kc-derivado-de-sensores-remotos"><span class="header-section-number">6.3</span> Kc derivado de sensores remotos</h2>
+<p>El uso de índices de vegetación para aproximar coeficientes de cultivo ha sido documentado en diferentes ecosistemas agrícolas y naturales <span class="citation" data-cites="Glenn2011KcVI Kamble2013Kc Poczas2015Kc">(<a href="#ref-Glenn2011KcVI" role="doc-biblioref">Glenn et&nbsp;al., 2011</a>; <a href="#ref-Kamble2013Kc" role="doc-biblioref">Kamble et&nbsp;al., 2013</a>; <a href="#ref-Poczas2015Kc" role="doc-biblioref">Pôças et&nbsp;al., 2015</a>)</span>. La lógica es que el desarrollo de la cobertura vegetal modifica la transpiración y el uso de agua, mientras los índices espectrales capturan parcialmente el estado de la vegetación <span class="citation" data-cites="Glenn2010ETVI Pocas2020Review">(<a href="#ref-Glenn2010ETVI" role="doc-biblioref">Glenn et&nbsp;al., 2010</a>; <a href="#ref-Pocas2020Review" role="doc-biblioref">Pôças et&nbsp;al., 2020</a>)</span>. No obstante, estos enfoques requieren calibración local, validación independiente y suficiente variabilidad temporal para ser operativos <span class="citation" data-cites="Pereira2015FAO56 Pocas2020Review">(<a href="#ref-Pereira2015FAO56" role="doc-biblioref">Pereira et&nbsp;al., 2015</a>; <a href="#ref-Pocas2020Review" role="doc-biblioref">Pôças et&nbsp;al., 2020</a>)</span>.</p>
+<p>En este trabajo, el Kc dinámico no se presenta como Kc calibrado universal. Se construyó como un coeficiente relativo escalado al rango observado de SAVI dentro del periodo y área de análisis. Esta decisión metodológica permite interpretar el producto como una herramienta exploratoria de espacialización, no como una sustitución de mediciones directas.</p>
+</section>
+<section id="landsatlst-y-diagnóstico-térmico" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="landsatlst-y-diagnóstico-térmico"><span class="header-section-number">6.4</span> Landsat/LST y diagnóstico térmico</h2>
+<p>La temperatura superficial terrestre (LST) se relaciona con procesos de intercambio de energía, estrés térmico y condición hídrica de la cobertura <span class="citation" data-cites="USGS2024LandsatST Ermida2020LST">(<a href="#ref-Ermida2020LST" role="doc-biblioref">Ermida et&nbsp;al., 2020</a>; <a href="#ref-USGS2024LandsatST" role="doc-biblioref">U.S. Geological Survey, 2024b</a>)</span>. En modelos de ET basados en balance energético, la información térmica puede ser fundamental porque aproxima diferencias entre temperatura de superficie y atmósfera <span class="citation" data-cites="Kullberg2017ThermalKc">(<a href="#ref-Kullberg2017ThermalKc" role="doc-biblioref">Kullberg et&nbsp;al., 2017</a>)</span>. Sin embargo, su utilidad depende de la disponibilidad de escenas válidas, control de calidad, nubosidad, resolución temporal y coincidencia con mediciones de campo <span class="citation" data-cites="USGS2024LandsatL2 Onacillova2022LandsatSentinelLST">(<a href="#ref-Onacillova2022LandsatSentinelLST" role="doc-biblioref">Onačillová et&nbsp;al., 2022</a>; <a href="#ref-USGS2024LandsatL2" role="doc-biblioref">U.S. Geological Survey, 2024a</a>)</span>.</p>
+<p>Por esa razón, Landsat/LST se incluyó como diagnóstico complementario. En este proyecto no se forzó una regresión térmica con una muestra reducida; se mantuvo como análisis descriptivo por rigor metodológico.</p>
+</section>
+</section>
+<section id="materiales-y-métodos" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Materiales y métodos</h1>
+<section id="área-de-estudio" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="área-de-estudio"><span class="header-section-number">7.1</span> Área de estudio</h2>
+<p>El área de estudio corresponde al entorno de una estación meteorológica ubicada en la Universidad Nacional de Colombia, sede Bogotá D.C. El análisis se enfocó en una cobertura de pasturas. Inicialmente se consideró un buffer de 300 m alrededor de la estación para relacionar la señal puntual meteorológica con la información satelital. Posteriormente se refinó el área mediante un AOI limpio de pasturas, excluyendo construcciones, vías y superficies duras que podían alterar la respuesta espectral.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-area-estudio" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-area-estudio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data/article_figures/maps_qgis/exports_png/fig_map01_localizacion_area_estudio.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-area-estudio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Localización de la estación meteorológica, buffer inicial de 300 m y AOI de pasturas.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>El refinamiento espacial es importante porque los índices espectrales responden a la mezcla de coberturas dentro del píxel y dentro del polígono de análisis. Si se incluyen edificios, vías o superficies duras, las estadísticas de vegetación pueden perder representatividad agronómica <span class="citation" data-cites="Glenn2008VI Zou2017Indices">(<a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Zou2017Indices" role="doc-biblioref">Zou &amp; Mõttus, 2017</a>)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-aoi-limpio" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-aoi-limpio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data/article_figures/maps_qgis/exports_png/fig_map02_aoi_limpio_exclusiones.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aoi-limpio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Refinamiento del área de análisis: buffer inicial, AOI de pasturas y exclusión de construcciones o superficies no vegetadas.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="datos-meteorológicos" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="datos-meteorológicos"><span class="header-section-number">7.2</span> Datos meteorológicos</h2>
+<p>La estación meteorológica fue la fuente base para construir la serie diaria de ET. La depuración incluyó revisión de fechas, control de consistencia y consolidación de registros diarios. El procesamiento permitió obtener 158 días de estación, de los cuales 143 fueron válidos para análisis.</p>
+<p>La calidad de los datos meteorológicos es crítica porque la estimación de ET depende de variables atmosféricas y de su continuidad temporal <span class="citation" data-cites="Allen1998FAO56 Pereira2015FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>; <a href="#ref-Pereira2015FAO56" role="doc-biblioref">Pereira et&nbsp;al., 2015</a>)</span>. En este proyecto, la corrección de fechas fue un paso metodológico central, ya que un error de parseo temporal puede romper la correspondencia entre estación e imágenes satelitales.</p>
+</section>
+<section id="datos-sentinel-2" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="datos-sentinel-2"><span class="header-section-number">7.3</span> Datos Sentinel-2</h2>
+<p>Se utilizaron imágenes Sentinel-2 de reflectancia superficial armonizada. Sentinel-2 ofrece bandas multiespectrales útiles para monitoreo de vegetación, agricultura y cambios de cobertura <span class="citation" data-cites="ESA2024Sentinel2 Copernicus2024Sentinel2">(<a href="#ref-Copernicus2024Sentinel2" role="doc-biblioref">Copernicus Data Space Ecosystem, 2024</a>; <a href="#ref-ESA2024Sentinel2" role="doc-biblioref">European Space Agency, 2024</a>)</span>. El procesamiento se realizó con Python y Google Earth Engine, aprovechando la colección armonizada de reflectancia superficial <span class="citation" data-cites="Gorelick2017GEE Google2024S2SR">(<a href="#ref-Google2024S2SR" role="doc-biblioref">Google Earth Engine Data Catalog, 2024</a>; <a href="#ref-Gorelick2017GEE" role="doc-biblioref">Gorelick et&nbsp;al., 2017</a>)</span>.</p>
+<p>Los índices calculados incluyeron NDVI, SAVI, EVI y NDRE. El cruce con la estación permitió identificar 10 fechas Sentinel válidas y 8 fechas <em>analysis-ready</em>, es decir, fechas con observación satelital útil y día meteorológico válido.</p>
+</section>
+<section id="datos-landsatlst" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="datos-landsatlst"><span class="header-section-number">7.4</span> Datos Landsat/LST</h2>
+<p>Landsat/LST se incorporó como una rama complementaria para diagnóstico térmico. Los productos Landsat Collection 2 Surface Temperature permiten obtener temperatura superficial derivada de datos térmicos y correcciones asociadas <span class="citation" data-cites="USGS2024LandsatST USGS2024LandsatL2">(<a href="#ref-USGS2024LandsatST" role="doc-biblioref">U.S. Geological Survey, 2024b</a>, <a href="#ref-USGS2024LandsatL2" role="doc-biblioref">2024a</a>)</span>. Aunque la LST puede ser relevante para interpretar estrés térmico y balance energético <span class="citation" data-cites="Ermida2020LST Kullberg2017ThermalKc">(<a href="#ref-Ermida2020LST" role="doc-biblioref">Ermida et&nbsp;al., 2020</a>; <a href="#ref-Kullberg2017ThermalKc" role="doc-biblioref">Kullberg et&nbsp;al., 2017</a>)</span>, la disponibilidad efectiva fue limitada: de 18 escenas consideradas, solo 4 fueron válidas para análisis descriptivo.</p>
+</section>
+<section id="flujo-metodológico" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="flujo-metodológico"><span class="header-section-number">7.5</span> Flujo metodológico</h2>
+<p>El flujo se diseñó como una secuencia reproducible:</p>
+<ol type="1">
+<li>Depuración de estación.</li>
+<li>Corrección y validación de fechas.</li>
+<li>Cálculo de ET diaria.</li>
+<li>Procesamiento Sentinel-2.</li>
+<li>Cálculo de índices espectrales.</li>
+<li>Cruce estación–satélite.</li>
+<li>Modelo ET–índice.</li>
+<li>Kc dinámico.</li>
+<li>ETc espacial.</li>
+<li>AOI limpio.</li>
+<li>Diagnóstico Landsat/LST.</li>
+</ol>
+<p>La metodología se apoyó en el principio de que la estación meteorológica aporta la componente atmosférica y Sentinel-2 aporta la variabilidad espacial de la cobertura vegetal. Esta integración coincide con enfoques que usan índices de vegetación para estimar o mapear coeficientes de cultivo <span class="citation" data-cites="Glenn2011KcVI Kamble2013Kc Pocas2020Review">(<a href="#ref-Glenn2011KcVI" role="doc-biblioref">Glenn et&nbsp;al., 2011</a>; <a href="#ref-Kamble2013Kc" role="doc-biblioref">Kamble et&nbsp;al., 2013</a>; <a href="#ref-Pocas2020Review" role="doc-biblioref">Pôças et&nbsp;al., 2020</a>)</span>.</p>
+</section>
+<section id="relación-etíndices-espectrales" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="relación-etíndices-espectrales"><span class="header-section-number">7.6</span> Relación ET–índices espectrales</h2>
+<p>Para cada fecha <em>analysis-ready</em> se cruzó la ET diaria de estación con estadísticas de los índices Sentinel-2. Se evaluaron modelos lineales simples por índice y por escala temporal. Dado el tamaño muestral reducido, los modelos se interpretaron como exploratorios y no como calibraciones definitivas.</p>
+<p>La relación principal evaluada fue:</p>
+<p><span class="math display">\[
+ET_{diaria} = \beta_0 + \beta_1 \times VI
+\]</span></p>
+<p>donde <span class="math inline">\(VI\)</span> representa un índice espectral como NDVI, SAVI, EVI o NDRE.</p>
+</section>
+<section id="construcción-del-kc-dinámico" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="construcción-del-kc-dinámico"><span class="header-section-number">7.7</span> Construcción del Kc dinámico</h2>
+<p>El Kc dinámico se construyó escalando el índice seleccionado al rango observado. Para SAVI se definió:</p>
+<p><span class="math display">\[
+VI_{norm} = \frac{SAVI - SAVI_{min}}{SAVI_{max} - SAVI_{min}}
+\]</span></p>
+<p>Luego:</p>
+<p><span class="math display">\[
+Kc_{dinámico} = Kc_{min} + VI_{norm}(Kc_{max} - Kc_{min})
+\]</span></p>
+<p>En este ejercicio se usaron valores exploratorios <span class="math inline">\(Kc_{min}=0.70\)</span> y <span class="math inline">\(Kc_{max}=1.05\)</span>. Estos valores no deben interpretarse como calibración universal, sino como límites operativos para espacializar la variación relativa de la cobertura dentro del área de análisis. El procedimiento es coherente con el uso de relaciones VI–Kc reportadas en literatura, pero se mantiene como exploratorio por el tamaño muestral y la falta de validación independiente <span class="citation" data-cites="Glenn2011KcVI Kamble2013Kc Poczas2015Kc">(<a href="#ref-Glenn2011KcVI" role="doc-biblioref">Glenn et&nbsp;al., 2011</a>; <a href="#ref-Kamble2013Kc" role="doc-biblioref">Kamble et&nbsp;al., 2013</a>; <a href="#ref-Poczas2015Kc" role="doc-biblioref">Pôças et&nbsp;al., 2015</a>)</span>.</p>
+</section>
+<section id="cálculo-de-etc-espacial" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="cálculo-de-etc-espacial"><span class="header-section-number">7.8</span> Cálculo de ETc espacial</h2>
+<p>La ETc espacial se calculó como:</p>
+<p><span class="math display">\[
+ETc_{espacial} = ET_{base\ estación} \times Kc_{dinámico}
+\]</span></p>
+<p>La interpretación correcta es que la estación aporta la señal diaria base y Sentinel-2 modula espacialmente esa señal mediante el Kc dinámico. Por tanto, el resultado representa demanda hídrica relativa espacializada, no ET real medida directamente por el satélite.</p>
+</section>
+</section>
+<section id="resultados" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Resultados</h1>
+<section id="disponibilidad-y-calidad-de-datos" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="disponibilidad-y-calidad-de-datos"><span class="header-section-number">8.1</span> Disponibilidad y calidad de datos</h2>
+<p>El procesamiento de estación permitió consolidar 158 días de observación, con 143 días válidos para análisis. En Sentinel-2 se obtuvieron 10 fechas válidas, de las cuales 8 cumplieron los criterios de cruce estación–satélite. En Landsat/LST se revisaron 18 escenas, pero solo 4 fueron válidas.</p>
+<p>Esta reducción de datos no se considera una falla oculta, sino un resultado metodológico importante. En monitoreo espacial de ETc, la disponibilidad real depende de la coincidencia entre estación, satélite y calidad de píxeles <span class="citation" data-cites="Copernicus2024Sentinel2 Gorelick2017GEE USGS2024LandsatL2">(<a href="#ref-Copernicus2024Sentinel2" role="doc-biblioref">Copernicus Data Space Ecosystem, 2024</a>; <a href="#ref-Gorelick2017GEE" role="doc-biblioref">Gorelick et&nbsp;al., 2017</a>; <a href="#ref-USGS2024LandsatL2" role="doc-biblioref">U.S. Geological Survey, 2024a</a>)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-timeline" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data/article_figures/fig01_station_satellite_timeline.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Disponibilidad temporal de datos de estación y fechas satelitales útiles para el análisis.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="relación-entre-et-diaria-e-índices-sentinel-2" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="relación-entre-et-diaria-e-índices-sentinel-2"><span class="header-section-number">8.2</span> Relación entre ET diaria e índices Sentinel-2</h2>
+<p>SAVI fue el índice con mejor desempeño para explicar la ET diaria del mismo día. El modelo presentó <span class="math inline">\(r = 0.900\)</span>, <span class="math inline">\(R^2 = 0.810\)</span> y RMSE = 0.173 mm día<span class="math inline">\(^{-1}\)</span>. La ecuación ajustada fue:</p>
+<p><span class="math display">\[
+ET = 0.773 + 5.137 \times SAVI
+\]</span></p>
+<p>Este resultado es coherente con el papel de SAVI en coberturas donde el suelo o la mezcla suelo–vegetación pueden influir sobre los índices espectrales <span class="citation" data-cites="Huete1988SAVI Glenn2008VI">(<a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Huete1988SAVI" role="doc-biblioref">Huete, 1988</a>)</span>. Sin embargo, por tratarse de ocho fechas <em>analysis-ready</em>, el resultado se interpreta como una asociación exploratoria fuerte, no como una calibración definitiva.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-savi-modelo" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-savi-modelo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data/article_figures/fig02_scatter_best_same_day_model.png" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-savi-modelo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: Relación entre ET diaria de estación y SAVI. SAVI fue el mejor predictor en la muestra disponible.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>La comparación entre índices mostró que NDVI, NDRE y EVI también aportan información relevante, aunque en este conjunto de datos SAVI ocupó el primer lugar. Esto respalda una conclusión prudente: SAVI fue el mejor predictor observado, pero no debe asumirse como único índice universal. La literatura recomienda considerar el contexto de cultivo, suelo, fenología y arquitectura de dosel al interpretar índices espectrales <span class="citation" data-cites="Bannari1995 Glenn2008VI Xue2017VIReview Zou2017Indices">(<a href="#ref-Bannari1995" role="doc-biblioref">Bannari et&nbsp;al., 1995</a>; <a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Xue2017VIReview" role="doc-biblioref">Xue &amp; Su, 2017</a>; <a href="#ref-Zou2017Indices" role="doc-biblioref">Zou &amp; Mõttus, 2017</a>)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ranking" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ranking-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data/article_figures/fig04_best_model_ranking.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ranking-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5: Comparación de modelos e índices espectrales evaluados.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="kc-dinámico-espacial" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="kc-dinámico-espacial"><span class="header-section-number">8.3</span> Kc dinámico espacial</h2>
+<p>Con base en SAVI se construyó un Kc dinámico relativo. En el AOI limpio de pasturas, el Kc_SAVI medio varió entre 0.819 y 0.986. La variación temporal del Kc reflejó cambios en la respuesta espectral de la cobertura, que se interpretan como cambios relativos en vigor, cobertura o condición de la vegetación.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-kc" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data/article_figures/maps_qgis/exports_png/fig_map03_kc_savi_multitemporal.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6: Variación multitemporal del Kc dinámico basado en SAVI sobre el AOI limpio de pasturas.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>El Kc dinámico debe entenderse como una herramienta de espacialización relativa. No reemplaza tablas de Kc ni calibraciones locales completas. Más bien, permite transformar la variación espectral observada en una superficie continua útil para interpretar heterogeneidad hídrica y cobertura vegetal <span class="citation" data-cites="Glenn2011KcVI Kamble2013Kc Pocas2020Review">(<a href="#ref-Glenn2011KcVI" role="doc-biblioref">Glenn et&nbsp;al., 2011</a>; <a href="#ref-Kamble2013Kc" role="doc-biblioref">Kamble et&nbsp;al., 2013</a>; <a href="#ref-Pocas2020Review" role="doc-biblioref">Pôças et&nbsp;al., 2020</a>)</span>.</p>
+</section>
+<section id="etc-espacial-exploratoria" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="etc-espacial-exploratoria"><span class="header-section-number">8.4</span> ETc espacial exploratoria</h2>
+<p>La ETc espacial se obtuvo multiplicando la ET base diaria de estación por el Kc dinámico. En las fechas seleccionadas, la ETc_SAVI media en el AOI limpio varió entre 1.475 y 2.851 mm día<span class="math inline">\(^{-1}\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-etc" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-etc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="data/article_figures/maps_qgis/exports_png/fig_map04_etc_savi_multitemporal.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-etc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;7: ETc espacial exploratoria basada en ET de estación y Kc dinámico SAVI.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Los mapas permiten visualizar zonas con diferente demanda hídrica relativa. Esta salida es la más cercana a la aplicación práctica en riego, porque traduce una medición puntual en una superficie de apoyo a decisiones.</p>
+</section>
+<section id="diagnóstico-landsatlst" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="diagnóstico-landsatlst"><span class="header-section-number">8.5</span> Diagnóstico Landsat/LST</h2>
+<p>Landsat/LST fue metodológicamente relevante porque la temperatura superficial se relaciona con procesos de energía y posible estrés hídrico <span class="citation" data-cites="USGS2024LandsatST Ermida2020LST Kullberg2017ThermalKc">(<a href="#ref-Ermida2020LST" role="doc-biblioref">Ermida et&nbsp;al., 2020</a>; <a href="#ref-Kullberg2017ThermalKc" role="doc-biblioref">Kullberg et&nbsp;al., 2017</a>; <a href="#ref-USGS2024LandsatST" role="doc-biblioref">U.S. Geological Survey, 2024b</a>)</span>. Sin embargo, la disponibilidad efectiva fue insuficiente para construir relaciones estadísticas robustas. De 18 escenas disponibles, solo 4 fueron válidas. Por esta razón, Landsat/LST se conservó como diagnóstico térmico complementario.</p>
+<p>Este resultado es importante para la defensa del proyecto: no se descartó Landsat por falta de interés, sino por rigor metodológico. Con cuatro observaciones válidas, una regresión térmica habría sido inestable y poco defendible.</p>
+</section>
+</section>
+<section id="discusión" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Discusión</h1>
+<section id="de-una-medición-puntual-a-una-superficie-de-manejo" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="de-una-medición-puntual-a-una-superficie-de-manejo"><span class="header-section-number">9.1</span> De una medición puntual a una superficie de manejo</h2>
+<p>El aporte central del proyecto consiste en conectar una medición puntual con una necesidad espacial de riego. La estación meteorológica permite estimar la ET base diaria, pero el riego se decide sobre áreas heterogéneas. Sentinel-2 permite observar esa heterogeneidad a través de la respuesta espectral de la cobertura <span class="citation" data-cites="ESA2024Sentinel2 Glenn2008VI">(<a href="#ref-ESA2024Sentinel2" role="doc-biblioref">European Space Agency, 2024</a>; <a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>)</span>. La integración de ambas fuentes permitió construir mapas exploratorios de Kc y ETc.</p>
+<p>Este enfoque respeta la lógica de FAO-56 porque mantiene separadas la componente atmosférica y la componente de cultivo <span class="citation" data-cites="Allen1998FAO56 Pereira2015FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>; <a href="#ref-Pereira2015FAO56" role="doc-biblioref">Pereira et&nbsp;al., 2015</a>)</span>. La innovación del ejercicio está en que la componente de cultivo se espacializa mediante un Kc dinámico derivado de Sentinel-2, en lugar de asumir un valor único para toda el área.</p>
+</section>
+<section id="por-qué-savi-fue-relevante" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="por-qué-savi-fue-relevante"><span class="header-section-number">9.2</span> Por qué SAVI fue relevante</h2>
+<p>SAVI presentó el mejor desempeño en la muestra disponible. Esto puede deberse a que la cobertura de pasturas y el área de análisis presentan mezcla de vegetación, suelo y elementos de entorno. SAVI fue diseñado para reducir parcialmente el efecto del suelo, lo cual puede mejorar su comportamiento frente a NDVI en coberturas no totalmente cerradas <span class="citation" data-cites="Huete1988SAVI Bannari1995">(<a href="#ref-Bannari1995" role="doc-biblioref">Bannari et&nbsp;al., 1995</a>; <a href="#ref-Huete1988SAVI" role="doc-biblioref">Huete, 1988</a>)</span>.</p>
+<p>Aun así, no se debe concluir que SAVI siempre será el mejor índice. La respuesta de los índices depende de la cobertura, densidad, estado fenológico, humedad, suelo y condiciones de adquisición <span class="citation" data-cites="Glenn2008VI Zou2017Indices">(<a href="#ref-Glenn2008VI" role="doc-biblioref">Glenn et&nbsp;al., 2008</a>; <a href="#ref-Zou2017Indices" role="doc-biblioref">Zou &amp; Mõttus, 2017</a>)</span>. Por eso, el resultado debe formularse así: SAVI fue el mejor predictor en este conjunto de datos y bajo estas condiciones.</p>
+</section>
+<section id="alcance-del-kc-dinámico" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="alcance-del-kc-dinámico"><span class="header-section-number">9.3</span> Alcance del Kc dinámico</h2>
+<p>El Kc dinámico calculado es relativo al rango observado de SAVI. Esta decisión es adecuada para un ejercicio exploratorio, pero no equivale a una calibración universal. Para convertirlo en herramienta operativa se requeriría aumentar el número de fechas, validar con humedad de suelo, balance hídrico, lisímetros o mediciones independientes de ET <span class="citation" data-cites="Poczas2015Kc Pocas2020Review">(<a href="#ref-Poczas2015Kc" role="doc-biblioref">Pôças et&nbsp;al., 2015</a>; <a href="#ref-Pocas2020Review" role="doc-biblioref">Pôças et&nbsp;al., 2020</a>)</span>.</p>
+<p>La ventaja de esta aproximación es que produce mapas interpretables. La limitación es que el valor absoluto del Kc depende de supuestos y del rango observado. Por tanto, su uso inmediato debe orientarse a priorización relativa y monitoreo espacial, no a diseño definitivo de láminas de riego sin validación adicional.</p>
+</section>
+<section id="importancia-del-aoi-limpio" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="importancia-del-aoi-limpio"><span class="header-section-number">9.4</span> Importancia del AOI limpio</h2>
+<p>El refinamiento del AOI fue una decisión metodológica clave. Si se usan estadísticas sobre un buffer que incluye construcciones, vías o superficies duras, los índices espectrales pierden representatividad agronómica. Excluir estas áreas permitió que el Kc y la ETc se calcularan sobre una cobertura más coherente con el objetivo de riego.</p>
+<p>En otras palabras, la calidad del AOI condiciona la calidad del Kc. Esta idea es fundamental para sensores remotos aplicados a riego: no basta con descargar imágenes; hay que asegurar que el área estadística represente la cobertura de interés.</p>
+</section>
+<section id="landsatlst-como-complemento-no-como-resultado-principal" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="landsatlst-como-complemento-no-como-resultado-principal"><span class="header-section-number">9.5</span> Landsat/LST como complemento, no como resultado principal</h2>
+<p>La rama Landsat/LST mostró una limitación frecuente en teledetección térmica: aunque el producto es conceptualmente potente, la disponibilidad efectiva puede ser baja. La nubosidad, sombras, máscara QA y resolución temporal redujeron la muestra a cuatro escenas válidas. Esto no permite una inferencia robusta, pero sí aporta un diagnóstico útil sobre la factibilidad del enfoque térmico.</p>
+<p>El resultado justifica mantener Landsat/LST como línea futura, especialmente si se complementa con UAS térmico o series más largas <span class="citation" data-cites="Kullberg2017ThermalKc Ermida2020LST Onacillova2022LandsatSentinelLST">(<a href="#ref-Ermida2020LST" role="doc-biblioref">Ermida et&nbsp;al., 2020</a>; <a href="#ref-Kullberg2017ThermalKc" role="doc-biblioref">Kullberg et&nbsp;al., 2017</a>; <a href="#ref-Onacillova2022LandsatSentinelLST" role="doc-biblioref">Onačillová et&nbsp;al., 2022</a>)</span>.</p>
+</section>
+<section id="aplicación-en-riego" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="aplicación-en-riego"><span class="header-section-number">9.6</span> Aplicación en riego</h2>
+<p>Los mapas de Kc dinámico y ETc espacial pueden apoyar decisiones de riego de tres maneras. Primero, permiten identificar zonas con mayor o menor demanda hídrica relativa. Segundo, ayudan a priorizar sectores que requieren seguimiento o intervención. Tercero, facilitan una lectura espacial de la cobertura que puede complementar observaciones de campo.</p>
+<p>El producto no entrega automáticamente una lámina de riego definitiva. Su aporte es convertir una señal puntual de ET en una superficie exploratoria de demanda relativa. Para llevarlo a programación operativa se requiere integrar eficiencia de aplicación, humedad del suelo, precipitación efectiva, almacenamiento del suelo, profundidad radicular y validación de campo <span class="citation" data-cites="Allen1998FAO56 Pereira2015FAO56">(<a href="#ref-Allen1998FAO56" role="doc-biblioref">Allen et&nbsp;al., 1998</a>; <a href="#ref-Pereira2015FAO56" role="doc-biblioref">Pereira et&nbsp;al., 2015</a>)</span>.</p>
+</section>
+<section id="aprendizaje-automático-como-trabajo-futuro" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="aprendizaje-automático-como-trabajo-futuro"><span class="header-section-number">9.7</span> Aprendizaje automático como trabajo futuro</h2>
+<p>La observación de que no conviene depender únicamente de SAVI es metodológicamente correcta. Un modelo multivariable podría integrar NDVI, SAVI, NDRE, EVI, LST, variables meteorológicas, humedad de suelo y datos UAS. Modelos como Random Forest, Gradient Boosting, Ridge, Lasso o XGBoost podrían mejorar la predicción si existe una base de datos suficiente <span class="citation" data-cites="Ali2024SiteSpecific Chang2025ML">(<a href="#ref-Ali2024SiteSpecific" role="doc-biblioref">Ali et&nbsp;al., 2024</a>; <a href="#ref-Chang2025ML" role="doc-biblioref">Chang et&nbsp;al., 2025</a>)</span>.</p>
+<p>Sin embargo, con ocho fechas <em>analysis-ready</em> no es defendible entrenar un Random Forest como resultado principal. El riesgo de sobreajuste sería alto. Por eso, en este proyecto se mantuvo un modelo simple e interpretable y se dejó el aprendizaje automático como evolución futura.</p>
+</section>
+</section>
+<section id="conclusiones" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Conclusiones</h1>
+<ol type="1">
+<li>El proyecto demostró una ruta metodológica viable para integrar estación meteorológica y Sentinel-2 con el fin de espacializar de forma exploratoria la ETc en una cobertura de pasturas.</li>
+<li>SAVI fue el índice con mejor relación con la ET diaria de estación en la muestra disponible, con <span class="math inline">\(R^2 = 0.810\)</span>, <span class="math inline">\(r = 0.900\)</span> y RMSE = 0.173 mm día<span class="math inline">\(^{-1}\)</span>.</li>
+<li>El Kc dinámico basado en SAVI permitió representar variabilidad relativa del estado de la cobertura vegetal; en el AOI limpio, el Kc medio varió entre 0.819 y 0.986.</li>
+<li>La ETc espacial exploratoria varió entre 1.475 y 2.851 mm día<span class="math inline">\(^{-1}\)</span> en las fechas seleccionadas, mostrando potencial para identificar zonas con distinta demanda hídrica relativa.</li>
+<li>El AOI limpio de pasturas fue indispensable para mejorar la representatividad agronómica del análisis, al excluir construcciones y superficies duras.</li>
+<li>Landsat/LST aportó una línea térmica complementaria, pero la baja disponibilidad de escenas válidas restringió su uso a diagnóstico descriptivo.</li>
+<li>El resultado no debe interpretarse como medición directa de ET real, sino como una espacialización reproducible de la ET de estación mediante un Kc dinámico derivado de Sentinel-2.</li>
+<li>Para pasar de aproximación exploratoria a herramienta operativa se requiere ampliar la serie temporal, validar con mediciones de campo e integrar variables adicionales.</li>
+</ol>
+</section>
+<section id="recomendaciones" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Recomendaciones</h1>
+<ul>
+<li>Ampliar el periodo de análisis para aumentar el número de fechas <em>analysis-ready</em>.</li>
+<li>Fortalecer el control de calidad de la estación meteorológica.</li>
+<li>Validar los mapas con humedad del suelo, balance hídrico, mediciones de campo o sensores adicionales.</li>
+<li>Explorar vuelos UAS multiespectrales o plataformas como SmartFarm para generar mosaicos de mayor resolución espacial.</li>
+<li>Evaluar modelos multivariables o de aprendizaje automático únicamente cuando exista una muestra suficiente.</li>
+<li>Mantener el repositorio y los scripts organizados para garantizar reproducibilidad y trazabilidad.</li>
+</ul>
+</section>
+<section id="ciencia-abierta-y-reproducibilidad" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Ciencia abierta y reproducibilidad</h1>
+<p>Con el fin de favorecer la transparencia metodológica, la trazabilidad del procesamiento y la reproducibilidad de los resultados, los scripts, insumos procesados, tablas, figuras y documentación técnica del proyecto se encuentran disponibles en el repositorio público:</p>
+<p><a href="https://github.com/ceaguilarv/Proyecto-Riegos-Y-Drenajes">Repositorio público del proyecto en GitHub</a></p>
+<p>El repositorio contiene el flujo de trabajo implementado en Python y Google Earth Engine para la depuración de la estación meteorológica, el procesamiento de Sentinel-2, el diagnóstico térmico Landsat/LST, la construcción del Kc dinámico, la generación de ETc espacial exploratoria y la elaboración de tablas y figuras finales. La reproducibilidad es un componente fundamental en análisis geoespacial aplicado, especialmente cuando se combinan datos de estación, sensores remotos y decisiones de manejo <span class="citation" data-cites="Gorelick2017GEE Ali2024SiteSpecific">(<a href="#ref-Ali2024SiteSpecific" role="doc-biblioref">Ali et&nbsp;al., 2024</a>; <a href="#ref-Gorelick2017GEE" role="doc-biblioref">Gorelick et&nbsp;al., 2017</a>)</span>.</p>
+</section>
+<section id="referencias" class="level1 unnumbered" data-number="13">
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">13 Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Ali2024SiteSpecific" class="csl-entry" role="listitem">
+Ali, A. M., Abouelghar, M., Belal, A. A., Saleh, N., Yones, M., &amp; Selim, A. I. (2024). Broad scope of site-specific crop management and specific role of remote sensing technologies within it: A review. <em>Journal of Agronomy and Crop Science</em>. <a href="https://doi.org/10.1111/jac.12732">https://doi.org/10.1111/jac.12732</a>
+</div>
+<div id="ref-Allen1998FAO56" class="csl-entry" role="listitem">
+Allen, R. G., Pereira, L. S., Raes, D., &amp; Smith, M. (1998). <em>Crop Evapotranspiration: Guidelines for Computing Crop Water Requirements</em>. Food; Agriculture Organization of the United Nations. <a href="https://www.fao.org/4/X0490E/x0490e00.htm">https://www.fao.org/4/X0490E/x0490e00.htm</a>
+</div>
+<div id="ref-Bannari1995" class="csl-entry" role="listitem">
+Bannari, A., Morin, D., Bonn, F., &amp; Huete, A. R. (1995). A review of vegetation indices. <em>Remote Sensing Reviews</em>, <em>13</em>(1–2), 95-120. <a href="https://doi.org/10.1080/02757259509532298">https://doi.org/10.1080/02757259509532298</a>
+</div>
+<div id="ref-Chang2025ML" class="csl-entry" role="listitem">
+Chang, Y., Zhang, Y., &amp; Wang, X. (2025). Machine learning for reference crop evapotranspiration modeling: A state-of-the-art review and future directions. <em>Agronomy</em>, <em>15</em>(9), 2038. <a href="https://doi.org/10.3390/agronomy15092038">https://doi.org/10.3390/agronomy15092038</a>
+</div>
+<div id="ref-Copernicus2024Sentinel2" class="csl-entry" role="listitem">
+Copernicus Data Space Ecosystem. (2024). <em>Sentinel-2 mission and Level-2A surface reflectance documentation</em>. <a href="https://documentation.dataspace.copernicus.eu/Data/SentinelMissions/Sentinel2.html">https://documentation.dataspace.copernicus.eu/Data/SentinelMissions/Sentinel2.html</a>
+</div>
+<div id="ref-Ermida2020LST" class="csl-entry" role="listitem">
+Ermida, S. L., Soares, P., Mantas, V., Göttsche, F.-M., &amp; Trigo, I. F. (2020). Google Earth Engine open-source code for land surface temperature estimation from the Landsat series. <em>Remote Sensing</em>, <em>12</em>(9), 1471. <a href="https://doi.org/10.3390/rs12091471">https://doi.org/10.3390/rs12091471</a>
+</div>
+<div id="ref-ESA2024Sentinel2" class="csl-entry" role="listitem">
+European Space Agency. (2024). <em>Sentinel-2 Mission</em>. ESA Earth Observation Missions. <a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-2">https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-2</a>
+</div>
+<div id="ref-Glenn2008VI" class="csl-entry" role="listitem">
+Glenn, E. P., Huete, A. R., Nagler, P. L., &amp; Nelson, S. G. (2008). Relationship between remotely-sensed vegetation indices, canopy attributes and plant physiological processes: What vegetation indices can and cannot tell us about the landscape. <em>Sensors</em>, <em>8</em>(4), 2136-2160. <a href="https://doi.org/10.3390/s8042136">https://doi.org/10.3390/s8042136</a>
+</div>
+<div id="ref-Glenn2011KcVI" class="csl-entry" role="listitem">
+Glenn, E. P., Huete, A. R., Nagler, P. L., &amp; Nelson, S. G. (2011). Vegetation index-based crop coefficients to estimate evapotranspiration by remote sensing in agricultural and natural ecosystems. <em>Hydrological Processes</em>, <em>25</em>(26), 4050-4062. <a href="https://doi.org/10.1002/hyp.8392">https://doi.org/10.1002/hyp.8392</a>
+</div>
+<div id="ref-Glenn2010ETVI" class="csl-entry" role="listitem">
+Glenn, E. P., Nagler, P. L., &amp; Huete, A. R. (2010). Vegetation index methods for estimating evapotranspiration by remote sensing. <em>Surveys in Geophysics</em>, <em>31</em>, 531-555. <a href="https://doi.org/10.1007/s10712-010-9102-2">https://doi.org/10.1007/s10712-010-9102-2</a>
+</div>
+<div id="ref-Google2024S2SR" class="csl-entry" role="listitem">
+Google Earth Engine Data Catalog. (2024). <em>Harmonized Sentinel-2 MSI: MultiSpectral Instrument, Level-2A Surface Reflectance</em>. <a href="https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED">https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED</a>
+</div>
+<div id="ref-Gorelick2017GEE" class="csl-entry" role="listitem">
+Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D., &amp; Moore, R. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. <em>Remote Sensing of Environment</em>, <em>202</em>, 18-27. <a href="https://doi.org/10.1016/j.rse.2017.06.031">https://doi.org/10.1016/j.rse.2017.06.031</a>
+</div>
+<div id="ref-Huete1988SAVI" class="csl-entry" role="listitem">
+Huete, A. R. (1988). A soil-adjusted vegetation index (SAVI). <em>Remote Sensing of Environment</em>, <em>25</em>(3), 295-309. <a href="https://doi.org/10.1016/0034-4257(88)90106-X">https://doi.org/10.1016/0034-4257(88)90106-X</a>
+</div>
+<div id="ref-Kamble2013Kc" class="csl-entry" role="listitem">
+Kamble, B., Kilic, A., &amp; Hubbard, K. (2013). Estimating crop coefficients using remote sensing-based vegetation index. <em>Remote Sensing</em>, <em>5</em>(4), 1588-1602. <a href="https://doi.org/10.3390/rs5041588">https://doi.org/10.3390/rs5041588</a>
+</div>
+<div id="ref-Kullberg2017ThermalKc" class="csl-entry" role="listitem">
+Kullberg, E. G., DeJonge, K. C., &amp; Chávez, J. L. (2017). Evaluation of thermal remote sensing indices to estimate crop evapotranspiration coefficients. <em>Agricultural Water Management</em>, <em>179</em>, 64-73. <a href="https://doi.org/10.1016/j.agwat.2016.07.007">https://doi.org/10.1016/j.agwat.2016.07.007</a>
+</div>
+<div id="ref-Monteith1965" class="csl-entry" role="listitem">
+Monteith, J. L. (1965). Evaporation and environment. <em>Symposia of the Society for Experimental Biology</em>, <em>19</em>, 205-234.
+</div>
+<div id="ref-Onacillova2022LandsatSentinelLST" class="csl-entry" role="listitem">
+Onačillová, K., Gallay, M., Paluba, D., Pirotti, F., Wencel, A., &amp; Trojak, M. (2022). Combining Landsat 8 and Sentinel-2 data in Google Earth Engine to derive higher resolution land surface temperature maps in urban environment. <em>Remote Sensing</em>, <em>14</em>(16), 4076. <a href="https://doi.org/10.3390/rs14164076">https://doi.org/10.3390/rs14164076</a>
+</div>
+<div id="ref-Penman1948" class="csl-entry" role="listitem">
+Penman, H. L. (1948). Natural evaporation from open water, bare soil and grass. <em>Proceedings of the Royal Society of London. Series A, Mathematical and Physical Sciences</em>, <em>193</em>(1032), 120-145. <a href="https://doi.org/10.1098/rspa.1948.0037">https://doi.org/10.1098/rspa.1948.0037</a>
+</div>
+<div id="ref-Pereira2015FAO56" class="csl-entry" role="listitem">
+Pereira, L. S., Allen, R. G., Smith, M., &amp; Raes, D. (2015). Crop evapotranspiration estimation with FAO56: Past and future. <em>Agricultural Water Management</em>, <em>147</em>, 4-20. <a href="https://doi.org/10.1016/j.agwat.2014.07.031">https://doi.org/10.1016/j.agwat.2014.07.031</a>
+</div>
+<div id="ref-Pocas2020Review" class="csl-entry" role="listitem">
+Pôças, I., Calera, A., Campos, I., &amp; Cunha, M. (2020). Remote sensing for estimating and mapping single and basal crop coefficientes: A review on spectral vegetation indices approaches. <em>Agricultural Water Management</em>, <em>233</em>, 106081. <a href="https://doi.org/10.1016/j.agwat.2020.106081">https://doi.org/10.1016/j.agwat.2020.106081</a>
+</div>
+<div id="ref-Poczas2015Kc" class="csl-entry" role="listitem">
+Pôças, I., Paço, T. A., Paredes, P., Cunha, M., &amp; Pereira, L. S. (2015). Estimation of actual crop coefficients using remotely sensed vegetation indices and soil water balance modelled data. <em>Remote Sensing</em>, <em>7</em>(3), 2373-2400. <a href="https://doi.org/10.3390/rs70302373">https://doi.org/10.3390/rs70302373</a>
+</div>
+<div id="ref-Tucker1979" class="csl-entry" role="listitem">
+Tucker, C. J. (1979). Red and photographic infrared linear combinations for monitoring vegetation. <em>Remote Sensing of Environment</em>, <em>8</em>(2), 127-150. <a href="https://doi.org/10.1016/0034-4257(79)90013-0">https://doi.org/10.1016/0034-4257(79)90013-0</a>
+</div>
+<div id="ref-USGS2024LandsatL2" class="csl-entry" role="listitem">
+U.S. Geological Survey. (2024a). <em>Landsat Collection 2 Level-2 Science Products</em>. <a href="https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products">https://www.usgs.gov/landsat-missions/landsat-collection-2-level-2-science-products</a>
+</div>
+<div id="ref-USGS2024LandsatST" class="csl-entry" role="listitem">
+U.S. Geological Survey. (2024b). <em>Landsat Collection 2 Surface Temperature</em>. <a href="https://www.usgs.gov/landsat-missions/landsat-collection-2-surface-temperature">https://www.usgs.gov/landsat-missions/landsat-collection-2-surface-temperature</a>
+</div>
+<div id="ref-Xue2017VIReview" class="csl-entry" role="listitem">
+Xue, J., &amp; Su, B. (2017). Significant remote sensing vegetation indices: A review of developments and applications. <em>Journal of Sensors</em>, <em>2017</em>, 1353691. <a href="https://doi.org/10.1155/2017/1353691">https://doi.org/10.1155/2017/1353691</a>
+</div>
+<div id="ref-Zou2017Indices" class="csl-entry" role="listitem">
+Zou, X., &amp; Mõttus, M. (2017). Sensitivity of common vegetation indices to the canopy structure of field crops. <em>Remote Sensing</em>, <em>9</em>(10), 994. <a href="https://doi.org/10.3390/rs9100994">https://doi.org/10.3390/rs9100994</a>
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiado");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiado");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
