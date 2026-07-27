@@ -39,18 +39,6 @@ En el AOI limpio de pasturas, el Kc medio basado en SAVI varió entre 0.819 y 0.
 
 **Palabras clave:** evapotranspiración del cultivo; Kc dinámico; ETc espacial; Sentinel-2; SAVI; riego; sensores remotos; pasturas; agricultura de precisión.
 
-# Resumen ejecutivo para el equipo
-
-Este documento acompaña el póster científico y debe leerse como guía técnica del ejercicio. La idea central es sencilla: una estación meteorológica aporta una estimación diaria de la demanda hídrica, pero mide en un punto. El área de pasturas, en cambio, es una superficie heterogénea. Por eso se propuso integrar la ET de estación con información espacial Sentinel-2 para construir mapas exploratorios de Kc dinámico y ETc espacial.
-
-La lectura aplicada para riego es la siguiente:
-
-1. **La estación meteorológica** aporta la señal diaria de ET o demanda atmosférica, siguiendo la lógica de la evapotranspiración de referencia y del cultivo ampliamente usada en riego [@Allen1998FAO56; @Pereira2015FAO56].
-2. **Sentinel-2** aporta variabilidad espacial de la cobertura vegetal mediante índices espectrales como NDVI, SAVI, EVI y NDRE [@ESA2024Sentinel2; @Copernicus2024Sentinel2; @Google2024S2SR].
-3. **SAVI** fue el índice que mejor explicó la ET diaria en la muestra disponible, lo cual es coherente con su diseño para reducir parcialmente la influencia del suelo en coberturas con mezcla suelo--vegetación [@Huete1988SAVI; @USGS2024LandsatST].
-4. **El Kc dinámico** se interpretó como un coeficiente relativo y exploratorio, no como un Kc universal calibrado. Su función fue espacializar la variabilidad de la cobertura dentro del AOI [@Glenn2011KcVI; @Kamble2013Kc; @Poczas2015Kc].
-5. **La ETc espacial** se obtuvo multiplicando la ET base diaria de estación por el Kc dinámico. Por tanto, no es una medición directa de ET real; es una espacialización exploratoria útil para interpretar demanda hídrica relativa.
-6. **La utilidad práctica** está en apoyar la priorización de sectores de riego, el seguimiento de coberturas y la identificación de zonas con mayor o menor demanda relativa.
 
 # Introducción
 
